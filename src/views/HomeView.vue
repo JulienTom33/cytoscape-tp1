@@ -54,12 +54,12 @@ const drawGraph = async () => {
       },
     });
 
-    // Ajout des éléments au graph (nœuds et arêtes)
+    // Pour le fichier genemania.json
     // graphData.forEach(element => {
     //   cy.add({
-    //     group: element.group, // "nodes" ou "edges"
-    //     data: element.data, // Propriétés du nœud ou de l'arête
-    //     position: element.position, // Position du nœud
+    //     group: element.group,
+    //     data: element.data,
+    //     position: element.position
     //   });
     // });
   } catch (error) {
