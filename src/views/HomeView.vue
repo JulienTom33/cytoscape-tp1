@@ -120,6 +120,8 @@ const layoutOptions = {
     name: 'preset',
     animate: false,
     fit: true,
+    animationDuration: 500,
+
   },
   null: {
     name: 'null',
@@ -135,21 +137,59 @@ const layoutOptions = {
     name: 'grid',
     animate: false,
     fit: true,
+    animationDuration: 500,    
+    // uses all available space on false, uses minimal space on true
+    condense: false,
+    // force num of rows in the grid
+    rows: 4, 
+    // force num of columns in the grid 
+    cols: 5, 
   },
   circle: {
     name: 'circle',
     animate: false,
     fit: true,
+    // prevents node overlap, may overflow boundingBox and radius if not enough space
+    avoidOverlap: true, 
+    // Excludes the label when calculating node bounding boxes for the layout algorithm
+    nodeDimensionsIncludeLabels: false,
+    // the radius of the circle 
+    radius: undefined,
+    // whether the layout should go clockwise (true) or counterclockwise/anticlockwise (false) 
+    clockwise: true, 
   },
   concentric: {
     name: 'concentric',
     animate: false,
     fit: true,
+    // where nodes start in radians
+    startAngle: 3 / 2 * Math.PI, 
+    // whether the layout should go clockwise (true) or counterclockwise/anticlockwise (false)
+    clockwise: true,
+    // whether levels have an equal radial distance betwen them, may cause bounding box overflow 
+    equidistant: false,
+    // min spacing between outside of nodes (used for radius adjustment) 
+    minNodeSpacing: 10, 
+    // height of layout area (overrides container height)
+    height: undefined, 
+    // width of layout area (overrides container width)
+    width: undefined, 
   },
   breadthfirst: {
     name: 'breadthfirst',
     animate: false,
     fit: true,
+    // whether the tree is directed downwards (or edges can point in any direction if false)
+    directed: false, 
+    // put depths in concentric circles if true, put depths top down if false
+    circle: false, 
+    // whether to create an even grid into which the DAG is placed (circle:false only)
+    grid: false, 
+    // positive spacing factor, larger => more space between nodes (N.B. n/a if causes overlap)
+    spacingFactor: 1.75, 
+    // prevents node overlap, may overflow boundingBox if not enough space
+    avoidOverlap: true,
+    animationDuration: 500
   },
   dagre: {
     name: 'dagre',
@@ -165,11 +205,28 @@ const layoutOptions = {
     name: 'cose',
     animate: false,
     fit: true,
+    animationDuration: undefined,
+    // Number of iterations between consecutive screen positions update
+    refresh: 20,
+    // Excludes the label when calculating node bounding boxes for the layout algorithm
+    nodeDimensionsIncludeLabels: false,
+    // Randomize the initial positions of the nodes (true) or use existing positions (false)
+    randomize: false,
+    // Extra spacing between components in non-compound graphs
+    componentSpacing: 40,
+    // Node repulsion (overlapping) multiplier
+    nodeOverlap: 4,
+    // Maximum number of iterations to perform
+    numIter: 1000,
   },
   'cose-bilkent': {
     name: 'cose-bilkent',
     animate: false,
     fit: true,
+    // 'draft', 'default' or 'proof" 
+    // - 'draft' fast cooling rate 
+    // - 'default' moderate cooling rate 
+    // - "proof" slow cooling rate
     quality: 'default',   
     // number of ticks per frame; higher is faster but more jerky
     refresh: 30,   
