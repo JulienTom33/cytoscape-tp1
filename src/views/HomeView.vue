@@ -69,7 +69,7 @@ const drawGraph = async () => {
           label: 'data(label)',
           'background-color': 'gray',
           'background-image': [            
-            'src/assets/controller-classic.png'           
+            'src/assets/Instagram_icon.png'           
           ],
           'background-fit': 'cover cover',
           'background-image-opacity': 0.8        
