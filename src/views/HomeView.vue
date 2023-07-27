@@ -62,11 +62,14 @@ const drawGraph = async () => {
       container: document.getElementById('cy'),
       boxSelectionEnabled: false,
       autounselectify: true,
+      wheelSensitivity: 0.25,
       style: cytoscape
         .stylesheet()
         .selector('node')
         .css({   
-          label: 'data(label)',
+          label: 'data(label)',          
+          'min-zoomed-font-size': 14,
+          'font-size': 8,
           'background-color': 'gray',
           'background-image': [            
             'src/assets/Instagram_icon.png'           
@@ -78,7 +81,9 @@ const drawGraph = async () => {
         .css({ 
             label: 'data(name)',      
            'line-color': 'green',
-           'curve-style' : 'haystack' 
+           'curve-style' : 'haystack', 
+           'min-zoomed-font-size': 14,
+           'font-size': 8,
 
         }),
         elements: {  
