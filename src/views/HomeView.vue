@@ -77,11 +77,12 @@ const drawGraph = async () => {
           'font-size': 8,
           'background-color': 'gray',
           'background-image': [            
-            'src/assets/Instagram_icon.png'           
+            // 'src/assets/Instagram_icon.png'  
+            'src/assets/controller-classic.png'         
           ],
           'background-fit': 'cover cover',
           'background-clip': 'none',
-          'background-image-opacity': 0.8        
+          'background-image-opacity': 0.8,                          
         })
         .selector('edge')
         .css({ 
@@ -169,6 +170,25 @@ const layoutOptions = {
     name: 'cose-bilkent',
     animate: false,
     fit: true,
+    quality: 'default',   
+    // number of ticks per frame; higher is faster but more jerky
+    refresh: 30,   
+    // Whether to enable incremental mode
+    randomize: true, 
+    // Ideal (intra-graph) edge length
+    idealEdgeLength: 50,
+    // Divisor to compute edge forces
+    edgeElasticity: 0.45,
+    // Nesting factor (multiplier) to compute ideal edge length for inter-graph edges
+    nestingFactor: 0.1,    
+    // Maximum number of iterations to perform
+    numIter: 2500,
+    // Whether to tile disconnected nodes
+    tile: true,
+    // Type of layout animation. The option set is {'during', 'end', false}
+    animate: 'end',
+    // Duration for animate:end
+    animationDuration: 500,    
   },
   cola: {
     name: 'cola',
@@ -178,7 +198,29 @@ const layoutOptions = {
   euler: {
     name: 'euler',
     animate: true,
-    fit: true,
+    fit: true, 
+    // Friction / drag coefficient to make the system stabilise over time
+    dragCoeff: 0.02,
+    // Whether to randomize the initial positions of the nodes
+    // true : Use random positions within the bounding box
+    // false : Use the current node positions as the initial positions
+    randomize: false,
+    // The amount of time passed per tick
+    // - Larger values result in faster runtimes but might spread things out too far
+    // - Smaller values produce more accurate results
+    timeStep: 10,
+    // The number of ticks per frame for animate:true
+    // - A larger value reduces rendering cost but can be jerky
+    // - A smaller value increases rendering cost but is smoother
+    refresh: 10,
+    // Maximum iterations and time (in ms) before the layout will bail out
+    // - A large value may allow for a better result
+    // - A small value may make the layout end prematurely
+    // - The layout may stop before this if it has settled
+    maxIterations: 2000,
+    maxSimulationTime: 7000,
+    // Prevent the user grabbing nodes during the layout (usually with animate:true)
+    ungrabifyWhileSimulating: false,
   },
   spread: {
     name: 'spread',
