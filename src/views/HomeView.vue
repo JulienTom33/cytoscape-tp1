@@ -7,12 +7,14 @@ import klay from 'cytoscape-klay';
 import cola from 'cytoscape-cola';
 import euler from 'cytoscape-euler';
 import spread from 'cytoscape-spread'
+import coseBilkent from 'cytoscape-cose-bilkent';
 
 cytoscape.use( dagre );
 cytoscape.use(klay)
 cytoscape.use(cola)
 cytoscape.use(euler)
 cytoscape.use(spread)
+cytoscape.use( coseBilkent );
 
 const getAllFiles = async () => {
   try {
@@ -24,12 +26,38 @@ const getAllFiles = async () => {
   }
 };
 
+const getNetwork = async () => {
+  drawGraph();
+};
+
+const graphElements = (response) => {
+  const data = response.data;
+  let nodes = [];
+  let edges = [];
+  if (data.nodes && data.edges) {
+    nodes = data.nodes;
+    edges = data.edges;
+  } else if (data.elements && Array.isArray(data.elements)) {  
+    nodes = data.elements.filter((element) => element.group === 'nodes');
+    edges = data.elements.filter((element) => element.group === 'edges');
+  } else if (data.elements && data.elements.nodes && data.elements.edges) {
+    nodes = data.elements.nodes;
+    edges = data.elements.edges;
+  }
+  return { nodes, edges };
+};
+
 const drawGraph = async () => {
   try {
-    const response = await axios.get('http://localhost:3000/api/files/nba-20');
-    const graphData = response.data.elements;
-    console.log(graphData)
 
+    const selectElement = document.getElementById('selectNetwork');
+    const selectedValue = selectElement.value;
+
+    const response = await axios.get(`http://localhost:3000/api/files/${selectedValue}`)
+    const graphData = response.data.elements;
+    console.log(graphData)  
+
+    const { nodes, edges } = graphElements(response);
     const cy = cytoscape({
       container: document.getElementById('cy'),
       boxSelectionEnabled: false,
@@ -37,31 +65,31 @@ const drawGraph = async () => {
       style: cytoscape
         .stylesheet()
         .selector('node')
-        .css({          
-          label: 'data(name)'          
+        .css({   
+          label: 'data(label)',
+          'background-color': 'gray',
+          'background-image': [            
+            'src/assets/controller-classic.png'           
+          ],
+          'background-fit': 'cover cover',
+          'background-image-opacity': 0.8        
         })
         .selector('edge')
         .css({       
-                
+           'line-color': 'green',
+           'curve-style' : 'haystack' 
+
         }),
-        elements: {
-          nodes: graphData.nodes,
-          edges: graphData.edges
+        elements: {  
+          nodes,
+          edges,      
 
         },
-      layout: {
-        name: selectedLayout.value     
-      },
-    });
-
-    // Ajout des éléments au graph (nœuds et arêtes)
-    // graphData.forEach(element => {
-    //   cy.add({
-    //     group: element.group, // "nodes" ou "edges"
-    //     data: element.data, // Propriétés du nœud ou de l'arête
-    //     position: element.position, // Position du nœud
-    //   });
-    // });
+        layout: {
+          name: selectedLayout.value     
+        },
+      });
+      
   } catch (error) {
     console.error(error);
   }
@@ -83,15 +111,15 @@ onMounted(()=>{
 <template>
   <header class="header">
     <label for="network">Network: </label>
-    <select name="Network" id="">
+    <select name="Network" id="selectNetwork" @change="getNetwork">
       <option value="genemania">genemania (200)</option>
       <option value="genemania-default">genemania-default (600)</option>
-      <option value="gal">gal-filtered (700)</option>
-      <option value="affinity">affinity purification (1400)</option>
-      <option value="wgcna">wgcna-modules (6000)</option>
+      <option value="gal-filtered">gal-filtered (700)</option>
+      <option value="affinity-purification">affinity purification (1400)</option>
+      <option value="wgcna-modules">wgcna-modules (6000)</option>
       <option value="tgca">tgca collorectal cancer (6400)</option>
-      <option value="nba10">nb-groups (10000)</option>
-      <option value="nb20">nb-groups (20000)</option>
+      <option value="nba-10">nb-groups (10000)</option>
+      <option value="nba-20">nb-groups (20000)</option>
     </select>
 
     <label for="layout">Layout: </label>
