@@ -75,7 +75,8 @@ const drawGraph = async () => {
           'background-image-opacity': 0.8        
         })
         .selector('edge')
-        .css({       
+        .css({ 
+            label: 'data(name)',      
            'line-color': 'green',
            'curve-style' : 'haystack' 
 
