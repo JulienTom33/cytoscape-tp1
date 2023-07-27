@@ -1,6 +1,6 @@
 <script setup>
 import cytoscape from 'cytoscape';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import axios from 'axios'
 import dagre from 'cytoscape-dagre';
 import klay from 'cytoscape-klay';
@@ -9,12 +9,14 @@ import euler from 'cytoscape-euler';
 import spread from 'cytoscape-spread'
 import coseBilkent from 'cytoscape-cose-bilkent';
 
-cytoscape.use( dagre );
+cytoscape.use( dagre )
 cytoscape.use(klay)
 cytoscape.use(cola)
 cytoscape.use(euler)
 cytoscape.use(spread)
-cytoscape.use( coseBilkent );
+cytoscape.use(coseBilkent)
+
+cytoscape.warnings(false)
 
 const getAllFiles = async () => {
   try {
@@ -58,11 +60,14 @@ const drawGraph = async () => {
     console.log(graphData)  
 
     const { nodes, edges } = graphElements(response);
-    const cy = cytoscape({
+    const cy = cytoscape({      
       container: document.getElementById('cy'),
       boxSelectionEnabled: false,
       autounselectify: true,
-      wheelSensitivity: 0.25,
+      wheelSensitivity: 0.2,
+      hideEdgesOnViewport: false,
+      textureOnViewport: false,
+      motionBlur: false, 
       style: cytoscape
         .stylesheet()
         .selector('node')
@@ -75,6 +80,7 @@ const drawGraph = async () => {
             'src/assets/Instagram_icon.png'           
           ],
           'background-fit': 'cover cover',
+          'background-clip': 'none',
           'background-image-opacity': 0.8        
         })
         .selector('edge')
@@ -91,9 +97,13 @@ const drawGraph = async () => {
           edges,      
 
         },
-        layout: {
-          name: selectedLayout.value     
-        },
+        layout: layoutOptions[selectedLayout.value],
+        // layout: {
+          
+        //   name: selectedLayout.value,
+        //   animate: false,
+        //   fit: true,                  
+        // }
       });
       
   } catch (error) {
@@ -103,13 +113,102 @@ const drawGraph = async () => {
 
 const selectedLayout = ref('preset')
 
+const layoutOptions = {
+  preset: {
+    name: 'preset',
+    animate: false,
+    fit: true,
+  },
+  null: {
+    name: 'null',
+    animate: false,
+    fit: true,
+  },
+  random: {
+    name: 'random',
+    animate: false,
+    fit: true,
+  },
+  grid: {
+    name: 'grid',
+    animate: false,
+    fit: true,
+  },
+  circle: {
+    name: 'circle',
+    animate: false,
+    fit: true,
+  },
+  concentric: {
+    name: 'concentric',
+    animate: false,
+    fit: true,
+  },
+  breadthfirst: {
+    name: 'breadthfirst',
+    animate: false,
+    fit: true,
+  },
+  dagre: {
+    name: 'dagre',
+    animate: false,
+    fit: true,
+  },
+  klay: {
+    name: 'klay',
+    animate: false,
+    fit: true,
+  },
+  cose: {
+    name: 'cose',
+    animate: false,
+    fit: true,
+  },
+  'cose-bilkent': {
+    name: 'cose-bilkent',
+    animate: false,
+    fit: true,
+  },
+  cola: {
+    name: 'cola',
+    animate: false,
+    fit: true,
+  },
+  euler: {
+    name: 'euler',
+    animate: true,
+    fit: true,
+  },
+  spread: {
+    name: 'spread',
+    animate: false,
+    fit: true,
+  },
+  springy: {
+    name: 'springy',
+    animate: false,
+    fit: true,
+  },
+  arbor: {
+    name: 'arbor',
+    animate: false,
+    fit: true,
+  } 
+};
+
+// const changeLayout = () => {
+//   drawGraph(selectedLayout);
+// };
 const changeLayout = () => {
   drawGraph()
 }
 
+
+
 onMounted(()=>{
   drawGraph()
   getAllFiles()  
+  
 })
 
 </script>
@@ -145,7 +244,7 @@ onMounted(()=>{
       <option value="euler">euler</option>
       <option value="spread">spread</option>
       <option value="springy">springy</option>
-      <option value="arbor">arbor</option>
+      <option value="arbor">arbor</option>      
     </select>
   </header>
   <div id="cy"></div>
