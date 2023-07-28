@@ -106,7 +106,6 @@ const drawGraph = async () => {
         //   fit: true,                  
         // }
       });
-      
 
   } catch (error) {
     console.error(error);
@@ -283,16 +282,6 @@ const layoutOptions = {
     name: 'spread',
     animate: false,
     fit: true,
-  },
-  springy: {
-    name: 'springy',
-    animate: false,
-    fit: true,
-  },
-  arbor: {
-    name: 'arbor',
-    animate: false,
-    fit: true,
   } 
 };
 
@@ -342,9 +331,7 @@ onMounted(()=>{
       <option value="cose-bilkent">cose-bilkent</option>
       <option value="cola">cola</option>
       <option value="euler">euler</option>
-      <option value="spread">spread</option>
-      <option value="springy">springy</option>
-      <option value="arbor">arbor</option>      
+      <option value="spread">spread</option>          
     </select>
   </header>
   <div id="cy"></div>
