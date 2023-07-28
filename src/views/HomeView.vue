@@ -73,8 +73,8 @@ const drawGraph = async () => {
         .selector('node')
         .css({   
           label: 'data(label)',          
-          'min-zoomed-font-size': 16,
-          'font-size': 6,
+          'min-zoomed-font-size': 8,
+          'font-size': 7,
           'background-color': 'gray',
           'background-image': [            
             // 'src/assets/Instagram_icon.png'  
@@ -89,8 +89,8 @@ const drawGraph = async () => {
             label: 'data(name)',      
            'line-color': 'green',
            'curve-style' : 'haystack', 
-           'min-zoomed-font-size': 16,
-           'font-size': 6,
+           'min-zoomed-font-size': 8,
+           'font-size': 7,
 
         }),
         elements: {  
@@ -105,23 +105,42 @@ const drawGraph = async () => {
         //   animate: false,
         //   fit: true,                  
         // }
-      });  
+      });
       
-      cy.on('zoom', (event) => {
-      const currentZoom = cy.zoom();
-      const labelFontSize = 6 / currentZoom;
-     
+      cy.on('render', () => {
       cy.nodes().forEach((node) => {
+        const currentZoom = cy.zoom();
+        const fontSize = 1 * currentZoom;
+        
         node.style('width', `${20 / currentZoom}px`);
         node.style('height', `${20 / currentZoom}px`);
-        node.style('font-size', `${0.5 / labelFontSize}px`);
+        node.style('font-size', `${fontSize}px`);
       });
 
       cy.edges().forEach((edge) => {
+        const currentZoom = cy.zoom();
+        const fontSize = 1 * currentZoom;
+       
         edge.style('width', 2 / currentZoom);
-        edge.style('font-size', `${20 / labelFontSize}px`);
+        edge.style('font-size', `${fontSize}px`);
       });
     });
+      
+    //   cy.on('zoom', (event) => {
+    //   const currentZoom = cy.zoom();
+    //   const labelFontSize = 8 / currentZoom;
+     
+    //   cy.nodes().forEach((node) => {
+    //     node.style('width', `${20 / currentZoom}px`);
+    //     node.style('height', `${20 / currentZoom}px`);
+    //     node.style('font-size', `${labelFontSize}px`);
+    //   });
+
+    //   cy.edges().forEach((edge) => {
+    //     edge.style('width', 2 / currentZoom);
+    //     edge.style('font-size', `${labelFontSize}px`);
+    //   });
+    // });
       
 
   } catch (error) {
