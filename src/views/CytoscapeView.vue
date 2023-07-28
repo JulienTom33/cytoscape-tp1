@@ -324,8 +324,7 @@ onMounted(()=>{
 <template>    
   <header class="header">
     <div>
-        <router-link to="/">Go to Home</router-link> |
-        <router-link to="/cytoscape">Go to Cytoscape</router-link> |
+        <router-link to="/">Go to Home</router-link> |        
         <router-link to="/forcegraph">Go to Forcegraph</router-link>
     </div>
     <label for="network">Network: </label>
