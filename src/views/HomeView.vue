@@ -73,8 +73,8 @@ const drawGraph = async () => {
         .selector('node')
         .css({   
           label: 'data(label)',          
-          'min-zoomed-font-size': 14,
-          'font-size': 8,
+          'min-zoomed-font-size': 12,
+          'font-size': 6,
           'background-color': 'gray',
           'background-image': [            
             // 'src/assets/Instagram_icon.png'  
@@ -89,8 +89,8 @@ const drawGraph = async () => {
             label: 'data(name)',      
            'line-color': 'green',
            'curve-style' : 'haystack', 
-           'min-zoomed-font-size': 14,
-           'font-size': 8,
+           'min-zoomed-font-size': 12,
+           'font-size': 6,
 
         }),
         elements: {  
@@ -105,7 +105,24 @@ const drawGraph = async () => {
         //   animate: false,
         //   fit: true,                  
         // }
+      });  
+      
+      cy.on('zoom', (event) => {
+      const currentZoom = cy.zoom();
+      const labelFontSize = 6 / currentZoom;
+     
+      cy.nodes().forEach((node) => {
+        node.style('width', `${20 / currentZoom}px`);
+        node.style('height', `${20 / currentZoom}px`);
+        node.style('font-size', `${10 / labelFontSize}px`);
       });
+
+      cy.edges().forEach((edge) => {
+        edge.style('width', 2 / currentZoom);
+        edge.style('font-size', `${10 / labelFontSize}px`);
+      });
+    });
+      
 
   } catch (error) {
     console.error(error);
@@ -222,6 +239,7 @@ const layoutOptions = {
     name: 'cose-bilkent',
     animate: false,
     fit: true,
+    padding: 10,
     // 'draft', 'default' or 'proof" 
     // - 'draft' fast cooling rate 
     // - 'default' moderate cooling rate 
@@ -291,8 +309,6 @@ const layoutOptions = {
 const changeLayout = () => {
   drawGraph()
 }
-
-
 
 onMounted(()=>{
   drawGraph()
