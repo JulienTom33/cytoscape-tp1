@@ -73,7 +73,7 @@ const drawGraph = async () => {
         .selector('node')
         .css({   
           label: 'data(label)',          
-          'min-zoomed-font-size': 12,
+          'min-zoomed-font-size': 16,
           'font-size': 6,
           'background-color': 'gray',
           'background-image': [            
@@ -89,7 +89,7 @@ const drawGraph = async () => {
             label: 'data(name)',      
            'line-color': 'green',
            'curve-style' : 'haystack', 
-           'min-zoomed-font-size': 12,
+           'min-zoomed-font-size': 16,
            'font-size': 6,
 
         }),
@@ -114,12 +114,12 @@ const drawGraph = async () => {
       cy.nodes().forEach((node) => {
         node.style('width', `${20 / currentZoom}px`);
         node.style('height', `${20 / currentZoom}px`);
-        node.style('font-size', `${10 / labelFontSize}px`);
+        node.style('font-size', `${0.5 / labelFontSize}px`);
       });
 
       cy.edges().forEach((edge) => {
         edge.style('width', 2 / currentZoom);
-        edge.style('font-size', `${10 / labelFontSize}px`);
+        edge.style('font-size', `${20 / labelFontSize}px`);
       });
     });
       
