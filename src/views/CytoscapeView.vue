@@ -1,6 +1,6 @@
 <script setup>
 import cytoscape from 'cytoscape';
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref } from 'vue';
 import axios from 'axios'
 import dagre from 'cytoscape-dagre';
 import klay from 'cytoscape-klay';
@@ -9,12 +9,14 @@ import euler from 'cytoscape-euler';
 import spread from 'cytoscape-spread'
 import coseBilkent from 'cytoscape-cose-bilkent';
 
+
 cytoscape.use( dagre )
 cytoscape.use(klay)
 cytoscape.use(cola)
 cytoscape.use(euler)
 cytoscape.use(spread)
 cytoscape.use(coseBilkent)
+
 
 cytoscape.warnings(false)
 
@@ -354,7 +356,7 @@ onMounted(()=>{
       <option value="cose-bilkent">cose-bilkent</option>
       <option value="cola">cola</option>
       <option value="euler">euler</option>
-      <option value="spread">spread</option>          
+      <option value="spread">spread</option>           
     </select>
   </header>
   <div id="cy"></div>
