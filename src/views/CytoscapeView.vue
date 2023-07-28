@@ -8,12 +8,6 @@ import cola from 'cytoscape-cola';
 import euler from 'cytoscape-euler';
 import spread from 'cytoscape-spread'
 import coseBilkent from 'cytoscape-cose-bilkent';
-// import cytosnap from 'cytosnap'
-
-
-
-var cytosnap  = require('cytosnap')
-var snap = cytosnap();
 
 
 cytoscape.use( dagre )
