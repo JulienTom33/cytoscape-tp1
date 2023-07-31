@@ -236,7 +236,7 @@ const loadGraphImage = async () => {
   try {
     const selectElement = document.getElementById('selectNetwork');
     const selectedValue = selectElement.value;
-    const response = await axios.get(`http://localhost:3000/api/files/${selectedValue}`, { responseType: 'arraybuffer' });    
+    const response = await axios.get(`http://localhost:3000/api/files_img/${selectedValue}`, { responseType: 'arraybuffer' });    
     const blob = new Blob([response.data], { type: 'image/png' });
     graphImage.value = URL.createObjectURL(blob);
     console.log(graphImage.value);
@@ -259,7 +259,7 @@ onMounted(async ()=>{
     <header class="header">
       <div>
           <router-link to="/">Go to Home</router-link> |        
-          <router-link to="/cytosnap">Go to Cytoscape</router-link>
+          <router-link to="/cytoscape">Go to Cytoscape</router-link>
       </div>
       <label for="network">Network: </label>
       <select name="Network" id="selectNetwork" @change="getNetwork">

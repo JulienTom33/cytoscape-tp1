@@ -78,7 +78,7 @@ const generateGraphImage = async (graphData) => {
   }
 };
 
-app.get('/api/files/:fileName', async (req, res) => {
+app.get('/api/files_img/:fileName', async (req, res) => {
   try {
     const { fileName } = req.params;
     const filePath = path.join(filesPath, `${fileName}.json`);    
@@ -163,54 +163,18 @@ app.get('/api/files/:fileName', async (req, res) => {
 
 
 
-// app.get('/api/files/:fileName', (req, res) => {
-//   const { fileName } = req.params;
-//   const filePath = path.join(filesPath, `${fileName}.json`);
-//   // console.log(filePath)
+app.get('/api/files/:fileName', (req, res) => {
+  const { fileName } = req.params;
+  const filePath = path.join(filesPath, `${fileName}.json`);
+  // console.log(filePath)
 
-//   fs.readFile(filePath, 'utf8', (err, data) => {
-//     if (err) {
-//       return res.status(404).json({ error: 'File not found' });
-//     }
-//     res.json(JSON.parse(data));
-//   });
-// });
-
-// // Endpoint to get the JSON data
-// app.get('/api/files/:fileName', async (req, res) => {
-//   const { fileName } = req.params;
-//   const filePath = path.join(filesPath, `${fileName}.json`);
-
-//   try {
-//     const fileData = fs.readFileSync(filePath, 'utf8');
-//     const jsonData = JSON.parse(fileData);
-
-//     // Use cytosnap to generate the image
-//     const img = await snap.shot({
-//       elements: jsonData.elements,
-//       layout: { name: 'grid' },
-//       style: [
-//         { selector: 'node', style: { 'background-color': 'red' } },
-//         { selector: 'edge', style: { 'line-color': 'red' } }
-//       ],
-//       resolvesTo: 'base64uri',
-//       format: 'png',
-//       width: 640,
-//       height: 480,
-//       background: 'transparent'
-//     });
-
-//     // Save the image to a file
-//     const imgPath = path.join(filesImgPath, `${fileName}.png`);
-//     fs.writeFileSync(imgPath, img.replace(/^data:image\/png;base64,/, ''), 'base64');
-
-//     // Send the JSON data along with the image URL
-//     res.json({ elements: jsonData.elements, imageUrl: `/api/files_img/${fileName}.png` });
-//   } catch (err) {
-//     console.error(err);
-//     return res.status(404).json({ error: 'File not found' });
-//   }
-// });
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(404).json({ error: 'File not found' });
+    }
+    res.json(JSON.parse(data));
+  });
+});
 
 function getAllFiles() {
   const jsonFiles = [];
