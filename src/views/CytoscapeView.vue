@@ -76,7 +76,9 @@ const drawGraph = async () => {
         .stylesheet()
         .selector('node')
         .css({   
-          label: 'data(label)',          
+          label: 'data(label)',
+          'width': 100,
+          'height': 100,          
           'min-zoomed-font-size': 8,
           'font-size': 7,          
           'background-color': 'gray',
@@ -91,8 +93,8 @@ const drawGraph = async () => {
         .selector('edge')
         .css({ 
             label: 'data(name)',      
-           'line-color': 'green',
-           'curve-style' : 'haystack', 
+           'line-color': 'blue',
+           'curve-style' : 'unbundled-bezier(multiple)', 
            'min-zoomed-font-size': 8,
            'font-size': 7,
 
@@ -116,8 +118,8 @@ const drawGraph = async () => {
         const currentZoom = cy.zoom();
         const fontSize = 1 * currentZoom;
         
-        node.style('width', `${9 / currentZoom}px`);
-        node.style('height', `${9 / currentZoom}px`);
+        node.style('width', `${10 / currentZoom}px`);
+        node.style('height', `${10 / currentZoom}px`);
         node.style('font-size', `${fontSize}px`);
       });
 
@@ -127,6 +129,7 @@ const drawGraph = async () => {
        
         edge.style('width', 2 / currentZoom);
         edge.style('font-size', `${fontSize}px`);
+        edge.style('curve-style', 'bezier' )
       });
     });
       
@@ -346,6 +349,7 @@ onMounted(async ()=>{
       <option value="updated_tgca_concentric_communities">tgca communities</option>
       <option value="nba-10">nb-groups (10000)</option>
       <option value="nba-20">nb-groups (20000)</option>
+      <option value="updated_affinity_purification_diagonal_communities">purif_diago</option>
     </select>
 
     <label for="layout">Layout: </label>
