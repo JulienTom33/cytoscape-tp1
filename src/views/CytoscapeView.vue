@@ -317,8 +317,8 @@ const changeLayout = () => {
   drawGraph()
 }
 
-onMounted(()=>{
-  drawGraph()
+onMounted(async ()=>{
+   drawGraph()
   getAllFiles()  
   
 })
@@ -366,6 +366,7 @@ onMounted(()=>{
       <option value="spread">spread</option>           
     </select>
   </header>
+
   <div id="cy"></div>
 
 </template>

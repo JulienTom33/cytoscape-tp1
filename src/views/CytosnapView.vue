@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import axios from 'axios';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
@@ -30,9 +30,9 @@ const getAllFiles = async () => {
   }
 };
 
-const getNetwork = async () => {
-  drawGraph();
-};
+// const getNetwork = async () => {
+//   drawGraph();
+// };
 
 const graphElements = (response) => {
   const data = response.data;
@@ -51,6 +51,25 @@ const graphElements = (response) => {
   return { nodes, edges };
 };
 
+const isZoomedIn = ref(false);
+const fixedImageSrc = ref('');
+
+const getNetwork = async () => {
+  try {
+    const selectElement = document.getElementById('selectNetwork');
+    const selectedValue = selectElement.value;
+
+    const response = await axios.get(`http://localhost:3000/api/files/${selectedValue}`);
+    fixedImageSrc.value = response.data.image;
+
+    // If the user is zoomed in, load the actual graph
+    if (isZoomedIn.value) {
+      loadGraph(selectedValue);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 
 const drawGraph = async () => {
@@ -64,6 +83,7 @@ const drawGraph = async () => {
     console.log(graphData)  
 
     const { nodes, edges } = graphElements(response);
+   
     const cy = cytoscape({      
       container: document.getElementById('cy'),
       boxSelectionEnabled: false,
@@ -129,9 +149,25 @@ const drawGraph = async () => {
         edge.style('font-size', `${fontSize}px`);
       });
     });
-      
 
-  } catch (error) {
+    cy.on('zoom', () => {
+      // Set the flag to true when the user zooms in
+      isZoomedIn.value = cy.zoom() > 1;
+    });
+
+     // Optionally, export the graph as an image and set it as the background of the container
+     const imageURI = await cy.png({ output: 'base64uri', bg: 'transparent', full: true, maxWidth: 800 });
+    document.getElementById('cy').style.backgroundImage = `url(${imageURI})`;
+
+    // Set container's dimensions to match the image's dimensions
+    const image = new Image();
+    image.src = imageURI;
+    image.onload = () => {
+      const cyContainer = document.getElementById('cy');
+      cyContainer.style.width = `${image.width}px`;
+      cyContainer.style.height = `${image.height}px`;
+    };
+    } catch (error) {
     console.error(error);
   }
 };
@@ -310,14 +346,16 @@ const layoutOptions = {
   } 
 };
 
+
 // const changeLayout = () => {
 //   drawGraph(selectedLayout);
 // };
-const changeLayout = () => {
+const changeLayout = () => {    
   drawGraph()
 }
 
-onMounted(()=>{
+onMounted(async ()=>{
+    await nextTick(); // Wait for the DOM to render
   drawGraph()
   getAllFiles()  
   
@@ -326,67 +364,82 @@ onMounted(()=>{
 </script>
 
 
-<template>
+<template>    
     <header class="header">
-    <div>
-        <router-link to="/">Go to Home</router-link> |        
-        <router-link to="/cytosnap">Go to Cytosnap</router-link>
-    </div>
-    <label for="network">Network: </label>
-    <select name="Network" id="selectNetwork" @change="getNetwork">
-      <option value="genemania">genemania (200)</option>
-      <option value="genemania-default">genemania-default (600)</option>
-      <option value="gal-filtered">gal-filtered (700)</option>
-      <option value="affinity-purification">affinity purification (1400)</option>
-      <option value="updated_affinity_purification_concentric_communities">affinity purification communities</option>
-      <option value="wgcna-modules">wgcna-modules (6000)</option>
-      <option value="tgca">tgca collorectal cancer (6400)</option>
-      <option value="updated_tgca_2">tgca rebuild (6400)</option>
-      <option value="updated_tgca_blocks">tgca blocks</option>
-      <option value="updated_tgca_spheric_aggregates">tgca spheric</option>
-      <option value="updated_tgca_concentric_communities">tgca communities</option>
-      <option value="nba-10">nb-groups (10000)</option>
-      <option value="nba-20">nb-groups (20000)</option>
-    </select>
-
-    <label for="layout">Layout: </label>
-    <select v-model="selectedLayout" @change="changeLayout">
-      <option value="preset">preset</option>
-      <option value="null">null</option>
-      <option value="random">random</option>
-      <option value="grid">grid</option>
-      <option value="circle">circle</option>
-      <option value="concentric">concentric</option>
-      <option value="breadthfirst">breadthfirst</option>
-      <option value="dagre">dagre</option>
-      <option value="klay">klay</option>
-      <option value="cose">cose</option>
-      <option value="cose-bilkent">cose-bilkent</option>
-      <option value="cola">cola</option>
-      <option value="euler">euler</option>
-      <option value="spread">spread</option>           
-    </select>
-  </header>
-    <div>      
-      <div class="links">
-        <router-link to="/">Go to Home</router-link> |        
-        <router-link to="/cytoscape">Go to Cytoscape</router-link>
+      <div>
+          <router-link to="/">Go to Home</router-link> |        
+          <router-link to="/cytosnap">Go to Cytoscape</router-link>
       </div>
-      <div class="cytosnap-image-container">
-        <img :src="cytosnapImage" alt="Cytosnap Image" />
-      </div>
-    </div>
-  </template> 
+      <label for="network">Network: </label>
+      <select name="Network" id="selectNetwork" @change="getNetwork">
+        <option value="genemania">genemania (200)</option>
+        <option value="genemania-default">genemania-default (600)</option>
+        <option value="gal-filtered">gal-filtered (700)</option>
+        <option value="affinity-purification">affinity purification (1400)</option>
+        <option value="updated_affinity_purification_concentric_communities">affinity purification communities</option>
+        <option value="wgcna-modules">wgcna-modules (6000)</option>
+        <option value="tgca">tgca collorectal cancer (6400)</option>
+        <option value="updated_tgca_2">tgca rebuild (6400)</option>
+        <option value="updated_tgca_blocks">tgca blocks</option>
+        <option value="updated_tgca_spheric_aggregates">tgca spheric</option>
+        <option value="updated_tgca_concentric_communities">tgca communities</option>
+        <option value="nba-10">nb-groups (10000)</option>
+        <option value="nba-20">nb-groups (20000)</option>
+      </select>
+  
+      <label for="layout">Layout: </label>
+      <select v-model="selectedLayout" @change="changeLayout">
+        <option value="preset">preset</option>
+        <option value="null">null</option>
+        <option value="random">random</option>
+        <option value="grid">grid</option>
+        <option value="circle">circle</option>
+        <option value="concentric">concentric</option>
+        <option value="breadthfirst">breadthfirst</option>
+        <option value="dagre">dagre</option>
+        <option value="klay">klay</option>
+        <option value="cose">cose</option>
+        <option value="cose-bilkent">cose-bilkent</option>
+        <option value="cola">cola</option>
+        <option value="euler">euler</option>
+        <option value="spread">spread</option>           
+      </select>
+    </header>
+    <div id="fixedImage" v-if="!isZoomedIn">
+    <img :src="fixedImageSrc" alt="Fixed Image" />
+  </div>
+  <div id="cy" v-if="isZoomedIn"></div>
+    <!-- <div id="cy"></div> -->
+  
+  </template>
 
 <style scoped>
-.links {
+.header {  
   position: absolute;
-  top: 50px;
-  left: 50px;
-  font-size: 3rem;
+  top: 0;
+  right: 20px;
+  padding: 10px; 
 }
 
-.cytosnap-image-container {
-  margin-top: 30px;
+#cy {
+  width: 100%;
+  height: 90%;
+  position: absolute;
+  top: 70px;
+  left: 0;
+}
+
+/* CSS for the fixed image container */
+#fixedImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* CSS to hide the interactive graph when fixed image is shown */
+#cy:not(.show) {
+  display: none;
 }
 </style>

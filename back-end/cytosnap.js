@@ -33,44 +33,88 @@ const graphElements = (response) => {
     return { nodes, edges };
   };
 
-snap.start().then(function(){
-    const response = axios.get(`http://localhost:3000/api/files/genemania`)
+  snap.start().then(function() {
+    const response = axios.get(`http://localhost:3000/api/files/genemania`);
     const graphData = response.data.elements;
-    console.log(graphData)
-
+    console.log(graphData);
+  
     const { nodes, edges } = graphElements(response);
-  return snap.shot({
-    elements: [ // http://js.cytoscape.org/#notation/elements-json
-    nodes = nodes,
-    edges = edges
-    //   { data: { id: 'foo' } },
-    //   { data: { id: 'bar' } },
-    //   { data: { source: 'foo', target: 'bar' } }
-    ],
-    layout: { // http://js.cytoscape.org/#init-opts/layout
-      name: 'grid' // you may reference a `cytoscape.use()`d extension name here
-    },
-    style: [ // http://js.cytoscape.org/#style
-      {
-        selector: 'node',
-        style: {
-          'background-color': 'red'
-        }
+    const img = snap.shot({
+      elements: [nodes, edges],
+      layout: {
+        name: 'grid',
       },
-      {
-        selector: 'edge',
-        style: {
-          'line-color': 'red'
-        }
-      }
-    ],
-    resolvesTo: 'base64uri',
-    format: 'png',
-    width: 640,
-    height: 480,
-    background: 'transparent'
+      style: [
+        {
+          selector: 'node',
+          style: {
+            'background-color': 'red',
+          },
+        },
+        {
+          selector: 'edge',
+          style: {
+            'line-color': 'red',
+          },
+        },
+      ],
+      resolvesTo: 'base64uri',
+      format: 'png',
+      width: 640,
+      height: 480,
+      background: 'transparent',
+    });
+  
+    // Save the image to a file
+    const blob = Buffer.from(img, 'base64');
+    const filename = 'genemania.png';
+    const file = new File([blob], filename, {type: 'image/png'});
+  
+    // Save the file to disk
+    const saveResult = file.save();
+  
+    if (saveResult) {
+      console.log('Image saved successfully.');
+    } else {
+      console.log('Error saving image.');
+    }
   });
-}).then(function( img ){
-  // do whatever you want with img
-  console.log( img );
-});
+
+// snap.start().then(function(){
+//     const response = axios.get(`http://localhost:3000/api/files/genemania`)
+//     const graphData = response.data.elements;
+//     console.log(graphData)
+
+//     const { nodes, edges } = graphElements(response);
+//   return snap.shot({
+//     elements: [ 
+//     nodes = nodes,
+//     edges = edges
+//     ],
+//     layout: { 
+//       name: 'grid' 
+//     },
+//     style: [ 
+//       {
+//         selector: 'node',
+//         style: {
+//           'background-color': 'red'
+//         }
+//       },
+//       {
+//         selector: 'edge',
+//         style: {
+//           'line-color': 'red'
+//         }
+//       }
+//     ],
+//     resolvesTo: 'base64uri',
+//     format: 'png',
+//     width: 640,
+//     height: 480,
+//     background: 'transparent'
+//   });
+// }).then(function( img ){
+//   // do whatever you want with img
+//   console.log( img );
+// });
