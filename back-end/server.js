@@ -9,7 +9,7 @@ const filesPath = path.join(__dirname, 'files');
 app.get('/api/files/:fileName', (req, res) => {
   const { fileName } = req.params;
   const filePath = path.join(filesPath, `${fileName}.json`);
-  console.log(filePath)
+  // console.log(filePath)
 
   fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {
@@ -18,7 +18,6 @@ app.get('/api/files/:fileName', (req, res) => {
     res.json(JSON.parse(data));
   });
 });
-
 
 function getAllFiles() {
   const jsonFiles = [];
