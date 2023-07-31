@@ -116,8 +116,8 @@ const drawGraph = async () => {
         const currentZoom = cy.zoom();
         const fontSize = 1 * currentZoom;
         
-        node.style('width', `${8 / currentZoom}px`);
-        node.style('height', `${8 / currentZoom}px`);
+        node.style('width', `${9 / currentZoom}px`);
+        node.style('height', `${9 / currentZoom}px`);
         node.style('font-size', `${fontSize}px`);
       });
 
