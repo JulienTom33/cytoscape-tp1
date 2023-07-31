@@ -321,7 +321,7 @@ const changeLayout = () => {
 }
 
 onMounted(async ()=>{
-   drawGraph()
+  drawGraph()
   getAllFiles()  
   
 })
