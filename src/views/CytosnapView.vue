@@ -408,9 +408,7 @@ onMounted(async ()=>{
     <div id="fixedImage" v-if="!isZoomedIn">
     <img :src="fixedImageSrc" alt="Fixed Image" />
   </div>
-  <div id="cy" v-if="isZoomedIn"></div>
-    <!-- <div id="cy"></div> -->
-  
+  <div id="cy" v-if="isZoomedIn"></div> 
   </template>
 
 <style scoped>
