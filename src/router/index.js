@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import ForceGraph from '../views/ForceGraphView.vue'
+import Cytosnap from '../views/CytosnapView.vue'
 import Cytoscape from '../views/CytoscapeView.vue'
 
 const router = createRouter({
@@ -12,9 +12,9 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/forcegraph',
-      name: 'forcegraph',
-      component: ForceGraph
+      path: '/cytosnap',
+      name: 'cytosnap',
+      component: Cytosnap
     },
     {
       path: '/cytoscape',

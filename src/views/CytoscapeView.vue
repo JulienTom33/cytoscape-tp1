@@ -116,8 +116,8 @@ const drawGraph = async () => {
         const currentZoom = cy.zoom();
         const fontSize = 1 * currentZoom;
         
-        node.style('width', `${20 / currentZoom}px`);
-        node.style('height', `${20 / currentZoom}px`);
+        node.style('width', `${8 / currentZoom}px`);
+        node.style('height', `${8 / currentZoom}px`);
         node.style('font-size', `${fontSize}px`);
       });
 
@@ -329,7 +329,7 @@ onMounted(()=>{
   <header class="header">
     <div>
         <router-link to="/">Go to Home</router-link> |        
-        <router-link to="/forcegraph">Go to Forcegraph</router-link>
+        <router-link to="/cytosnap">Go to Cytosnap</router-link>
     </div>
     <label for="network">Network: </label>
     <select name="Network" id="selectNetwork" @change="getNetwork">
@@ -339,6 +339,7 @@ onMounted(()=>{
       <option value="affinity-purification">affinity purification (1400)</option>
       <option value="wgcna-modules">wgcna-modules (6000)</option>
       <option value="tgca">tgca collorectal cancer (6400)</option>
+      <option value="tgca_rebuild">tgca rebuild (6400)</option>
       <option value="nba-10">nb-groups (10000)</option>
       <option value="nba-20">nb-groups (20000)</option>
     </select>
