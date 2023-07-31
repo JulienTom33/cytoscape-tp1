@@ -337,11 +337,13 @@ onMounted(()=>{
       <option value="genemania-default">genemania-default (600)</option>
       <option value="gal-filtered">gal-filtered (700)</option>
       <option value="affinity-purification">affinity purification (1400)</option>
+      <option value="updated_affinity_purification_concentric_communities">affinity purification communities</option>
       <option value="wgcna-modules">wgcna-modules (6000)</option>
       <option value="tgca">tgca collorectal cancer (6400)</option>
       <option value="updated_tgca_2">tgca rebuild (6400)</option>
       <option value="updated_tgca_blocks">tgca blocks</option>
       <option value="updated_tgca_spheric_aggregates">tgca spheric</option>
+      <option value="updated_tgca_concentric_communities">tgca communities</option>
       <option value="nba-10">nb-groups (10000)</option>
       <option value="nba-20">nb-groups (20000)</option>
     </select>
