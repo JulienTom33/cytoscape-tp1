@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import axios from 'axios';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
@@ -8,6 +8,7 @@ import cola from 'cytoscape-cola';
 import euler from 'cytoscape-euler';
 import spread from 'cytoscape-spread'
 import coseBilkent from 'cytoscape-cose-bilkent';
+
 
 cytoscape.use( dagre )
 cytoscape.use(klay)
@@ -208,6 +209,10 @@ const changeLayout = () => {
 
 const graphImage = ref('');
 
+const zoomLevel = ref(100); 
+const maxZoomLevel = 500; 
+const minZoomLevel = 20; //
+
 
 const getNetwork = async () => {
   loadGraphImage();
@@ -225,6 +230,25 @@ const loadGraphImage = async () => {
     console.error('Erreur lors du chargement de l\'image du graphe :', error);
   }
 };
+
+
+const handleMouseWheel = (event) => {
+  // Réduire le défilement par défaut pour empêcher le défilement de la page
+  event.preventDefault();
+
+  // Calculer le niveau de zoom en fonction de la direction de la molette
+  const delta = event.deltaY;
+  zoomLevel.value += delta > 0 ? -10 : 10;
+
+  // Limiter le niveau de zoom entre les valeurs minZoomLevel et maxZoomLevel
+  if (zoomLevel.value > maxZoomLevel) zoomLevel.value = maxZoomLevel;
+  if (zoomLevel.value < minZoomLevel) zoomLevel.value = minZoomLevel;
+};
+
+const zoomStyle = computed(() => ({
+  transform: `scale(${zoomLevel.value / 100})`,
+}));
+
 
 onMounted(async ()=>{  
     loadGraphImage(); 
@@ -275,11 +299,15 @@ onMounted(async ()=>{
         <option value="euler">euler</option>
         <option value="spread">spread</option>           
       </select>
-    </header>   
-    <div>
+    </header> 
+    
+    <div @wheel="handleMouseWheel" class="image-zoom-container">
+    <img :src="graphImage" alt="Graph" :style="zoomStyle" />
+  </div>
+    <!-- <div>
       <img :src="graphImage" alt="Graph" class="graphImage"/>
       <div id="cy"></div>
-    </div>
+    </div> -->
     
   </template>
 
