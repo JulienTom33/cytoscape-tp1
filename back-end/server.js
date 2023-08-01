@@ -224,7 +224,7 @@ const layoutOptions = {
 };
 
 
-const generateGraphImage = async (graphData) => {
+const generateGraphImage = async (graphData, zoomLevel) => {
   try {
     const snap = cytosnap(options);
     await snap.start();
@@ -259,7 +259,7 @@ const generateGraphImage = async (graphData) => {
       format: 'png',
       width: 640,
       height: 480,
-      background: 'transparent'
+      background: 'transparent'      
     });
 
     const buffer = Buffer.from(img.split(',')[1], 'base64');

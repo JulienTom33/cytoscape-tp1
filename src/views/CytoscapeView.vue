@@ -99,8 +99,7 @@ const drawGraph = async () => {
         }),
         elements: {  
           nodes,
-          edges,      
-
+          edges
         },
         layout: layoutOptions[selectedLayout.value],
         // layout: {

@@ -27,6 +27,7 @@ const getAllFiles = async () => {
     console.error(error);
   }
 };
+
 const selectedLayout = ref('preset')
 
 const layoutOptions = {
@@ -201,12 +202,12 @@ const layoutOptions = {
   } 
 };
 
-
 const changeLayout = () => {
   loadGraphImage(selectedLayout);
 };
 
 const graphImage = ref('');
+
 
 const getNetwork = async () => {
   loadGraphImage();
@@ -226,10 +227,10 @@ const loadGraphImage = async () => {
 };
 
 onMounted(async ()=>{  
-    loadGraphImage();  
-    getAllFiles()  
+    loadGraphImage(); 
+    getAllFiles()      
+  });
   
-})
 
 </script>
 
@@ -276,9 +277,10 @@ onMounted(async ()=>{
       </select>
     </header>   
     <div>
-      <img :src="graphImage" alt="Graph" class="graphImage" />
+      <img :src="graphImage" alt="Graph" class="graphImage"/>
+      <div id="cy"></div>
     </div>
-  <!-- <div id="cy"></div>  -->
+    
   </template>
 
 <style scoped>
@@ -290,8 +292,8 @@ onMounted(async ()=>{
 }
 
 .graphImage {
-  width: 50vw;
-  height: 70vh
+  width: 60vw;
+  height: 80vh
   /* width: 70%;
   height: 70%;
   position: absolute;
