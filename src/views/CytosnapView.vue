@@ -66,7 +66,8 @@ onMounted(async ()=>{
     <header class="header">
       <div>
           <router-link to="/">Go to Home</router-link> |        
-          <router-link to="/cytoscape">Go to Cytoscape</router-link>
+          <router-link to="/cytoscape">Go to Cytoscape</router-link> |
+          <router-link to="/cytoscape-server">Go to Cytoscape Server</router-link>
       </div>
       <label for="network">Network: </label>
       <select name="Network" id="selectNetwork" @change="getNetwork">

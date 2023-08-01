@@ -257,8 +257,8 @@ const generateGraphImage = async (graphData, zoomLevel) => {
       ],
       resolvesTo: 'base64uri',
       format: 'png',
-      width: 640,
-      height: 480,
+      width: 1920,
+      height: 1080,
       background: 'transparent'      
     });
 
