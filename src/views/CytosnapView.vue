@@ -211,7 +211,7 @@ const graphImage = ref('');
 
 const zoomLevel = ref(100); 
 const maxZoomLevel = 500; 
-const minZoomLevel = 20; //
+const minZoomLevel = 20;
 
 
 const getNetwork = async () => {
@@ -231,16 +231,13 @@ const loadGraphImage = async () => {
   }
 };
 
-
 const handleMouseWheel = (event) => {
-  // Réduire le défilement par défaut pour empêcher le défilement de la page
-  event.preventDefault();
-
-  // Calculer le niveau de zoom en fonction de la direction de la molette
-  const delta = event.deltaY;
+ 
+  event.preventDefault(); 
+  
+  const delta = event.deltaY; 
   zoomLevel.value += delta > 0 ? -10 : 10;
 
-  // Limiter le niveau de zoom entre les valeurs minZoomLevel et maxZoomLevel
   if (zoomLevel.value > maxZoomLevel) zoomLevel.value = maxZoomLevel;
   if (zoomLevel.value < minZoomLevel) zoomLevel.value = minZoomLevel;
 };
@@ -300,10 +297,12 @@ onMounted(async ()=>{
         <option value="spread">spread</option>           
       </select>
     </header> 
+
+ 
     
-    <div @wheel="handleMouseWheel" class="image-zoom-container">
-    <img :src="graphImage" alt="Graph" :style="zoomStyle" />
-  </div>
+    <div @wheel="handleMouseWheel">
+      <img :src="graphImage" alt="Graph" :style="zoomStyle" class="graphImage" />
+    </div>
     <!-- <div>
       <img :src="graphImage" alt="Graph" class="graphImage"/>
       <div id="cy"></div>
@@ -321,7 +320,7 @@ onMounted(async ()=>{
 
 .graphImage {
   width: 60vw;
-  height: 80vh
+  height: 60vh; 
   /* width: 70%;
   height: 70%;
   position: absolute;
