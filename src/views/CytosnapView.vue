@@ -43,7 +43,7 @@ const handleMouseWheel = (event) => {
   event.preventDefault(); 
   
   const delta = event.deltaY; 
-  zoomLevel.value += delta > 0 ? -10 : 10;
+  zoomLevel.value += delta > 0 ? -25 : 25;
 
   if (zoomLevel.value > maxZoomLevel) zoomLevel.value = maxZoomLevel;
   if (zoomLevel.value < minZoomLevel) zoomLevel.value = minZoomLevel;
