@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Cytosnap from '../views/CytosnapView.vue'
 import Cytoscape from '../views/CytoscapeView.vue'
+import CytoscapeServer from '../views/CytoscapeServerView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,7 +21,12 @@ const router = createRouter({
       path: '/cytoscape',
       name: 'cytoscape',
       component: Cytoscape
-    }   
+    },
+    {
+      path: '/cytoscape-server',
+      name: 'cytoscape-server',
+      component: CytoscapeServer
+    }    
   ]
 })
 
