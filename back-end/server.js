@@ -80,9 +80,17 @@ const generateGraphImage = async (graphData) => {
               },
       style: [
                 {
-                  selector: 'node',
+                  selector: 'node',                  
                   style: {
-                    'background-color': 'blue',
+                    'background-color': 'blue',                   
+                    'background-image': [            
+                      // '/assets/Instagram_icon.png'  
+                      'back-end/assets/controller-classic.png'              
+                               
+                    ],
+                    'background-fit': 'cover cover',
+                    'background-clip': 'none',
+                    'background-image-opacity': 0.8, 
                   },
                 },
                 {
