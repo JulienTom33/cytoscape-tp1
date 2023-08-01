@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const { log } = require('console');
 const cors = require('cors');
+const cytoscape = require('cytoscape');
 const cytosnap = require('cytosnap');
 
 const app = express();
@@ -169,7 +170,43 @@ app.get('/api/files', (req, res) => {
   // console.log(allFiles)
 });
 
+// ****************************************************************************************************************************************
+// CYTOSCAPE SERVER TEST
 
+
+// Route pour récupérer le graphe généré avec Cytoscape
+app.get('/api/graph', (req, res) => {
+  const graphData = createGraph();
+  res.json(graphData);
+});
+
+// Fonction pour créer le graphe avec Cytoscape
+function createGraph() {
+  const cy = cytoscape();
+
+  // Ajouter des nœuds au graphe
+  cy.add([
+    { data: { id: 'node1', label: 'Node 1' } },
+    { data: { id: 'node2', label: 'Node 2' } },
+    // Ajoutez d'autres nœuds ici...
+  ]);
+
+  // Ajouter des arêtes au graphe
+  cy.add([
+    { data: { source: 'node1', target: 'node2' } },
+    // Ajoutez d'autres arêtes ici...
+  ]);
+
+  // Appliquer le layout pour que les nœuds soient bien positionnés
+  cy.layout({ name: 'grid' }).run();
+
+  // Récupérer les éléments du graphe sous forme de données JSON
+  const graphData = cy.json().elements;
+
+  return graphData;
+}
+
+// ****************************************************************************************************************************************
 /* 
 server port
 */
