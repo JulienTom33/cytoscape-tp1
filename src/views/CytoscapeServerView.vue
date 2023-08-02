@@ -217,25 +217,68 @@ async function fetchGraphData() {
   }
 }
 
-function drawGraph(data) {
-  cytoscape({
-    container: cyContainer.value,
-    elements: data,
-    style: [
-      {
-        selector: 'node',
-        style: {
-          'background-color': '#ff5733',
-          label: 'data(label)',
-        },
-      },
-    ],
-    layout: {
-      // layout: layoutOptions[selectedLayout.value],
-      name: 'euler',
-    },
-  });
-}
+const drawGraph = (data) => {
+  const cy = cytoscape({
+  container: cyContainer.value,
+  boxSelectionEnabled: false,
+  autounselectify: true,
+  wheelSensitivity: 0.5,
+  hideEdgesOnViewport: false,
+  textureOnViewport: false,
+  motionBlur: false,
+  elements: data,
+  style: cytoscape.stylesheet()
+    .selector('node')
+    .css({
+      label: 'data(label)',
+      'width': 100,
+      'height': 100,
+      'min-zoomed-font-size': 8,
+      'font-size': 7,
+      'background-color': 'gray',
+      'background-image': [            
+            // 'src/assets/Instagram_icon.png'  
+            'src/assets/controller-classic.png'         
+          ],
+          'background-fit': 'cover cover',
+          'background-clip': 'none',
+          'background-image-opacity': 0.8,  
+    })
+    .selector('edge')
+    .css({
+      label: 'data(name)',
+      'line-color': 'orange',
+      'curve-style': 'unbundled-bezier(multiple)',
+      'min-zoomed-font-size': 8,
+      'font-size': 7,
+    }),
+  layout: {
+    name: 'euler',
+    animate: false,
+    fit: true,
+  }
+});
+
+// cy.on('render', () => {
+//   cy.nodes().forEach((node) => {
+//     const currentZoom = cy.zoom();
+//     const fontSize = 1 * currentZoom;
+
+//     node.style('width', `${10 / currentZoom}px`);
+//     node.style('height', `${10 / currentZoom}px`);
+//     node.style('font-size', `${10 / fontSize}px`);
+//   });
+
+//   cy.edges().forEach((edge) => {
+//     const currentZoom = cy.zoom();
+//     const fontSize = 1 * currentZoom;
+
+//     edge.style('width', 2 / currentZoom);
+//     edge.style('font-size', `${10 / fontSize}px`);
+//     edge.style('curve-style', 'bezier');
+//   });
+// });
+
 
 </script>
 
