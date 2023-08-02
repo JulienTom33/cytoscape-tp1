@@ -244,25 +244,7 @@ const drawGraph = async () => {
   const graphData = response.data.elements;
   console.log(graphData)
   
-  <<<<<<< HEAD
-function initializeCytoscape(data) {
-  cytoscape({
-    container: cyContainer.value,
-    elements: data,
-    style: [
-      {
-        selector: 'node',
-        style: {
-          'background-color': '#ff5733',
-          label: 'data(label)',
-        },
-      },
-    ],
-    layout: {
-      name: 'preset',
-    },
-=======
-const { nodes, edges } = graphElements(response);
+  const { nodes, edges } = graphElements(response);
 
   const cy = cytoscape({
     container: cyContainer.value,
@@ -315,7 +297,6 @@ cy.on('zoom', (event) => {
   cy.style().selector('edge').style({
     'width': edgeWidth + 'px'    
   }).update();
->>>>>>> 7342b324085fb1b81fc7f14b0bd4a2600cd3bf4c
 });      
 }
 
