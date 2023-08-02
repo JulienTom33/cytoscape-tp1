@@ -184,6 +184,7 @@ app.get('/api/files', (req, res) => {
 // Chemin du fichier JSON dans le dossier "files"
 const filePath = path.join(__dirname, 'files', 'nba-20.json');
 
+
 // Route pour récupérer le graphe généré avec Cytoscape depuis le fichier JSON
 app.get('/api/graph', (req, res) => {
   try {
@@ -198,7 +199,7 @@ app.get('/api/graph', (req, res) => {
 
 // Fonction pour créer le graphe avec Cytoscape à partir du fichier JSON
 function createGraphFromJSON(filePath) {
-  const cy = cytoscape({ headless: true });
+  const cy = cytoscape({ headless: true }); 
 
   try {
     const jsonData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
@@ -230,44 +231,6 @@ function createGraphFromJSON(filePath) {
     throw error;
   }
 }
-
-// // Route pour récupérer le graphe généré avec Cytoscape
-// app.get('/api/graph', (req, res) => { 
-//   const graphData = createGraph();
-//   res.json(graphData);
-// });
-
-// // Fonction pour créer le graphe avec Cytoscape
-// function createGraph() {
-//   const cy = cytoscape();
-
-//   // Ajouter des nœuds au graphe
-//   cy.add([
-//     { data: { id: 'node1', label: 'Node 1' } },
-//     { data: { id: 'node2', label: 'Node 2' } },
-//     { data: { id: 'node3', label: 'Node 3' } },
-//     { data: { id: 'node4', label: 'Node 4' } },
-//     { data: { id: 'node5', label: 'Node 5' } },
-//     // Ajoutez d'autres nœuds ici...
-//   ]);
-
-//   // Ajouter des arêtes au graphe
-//   cy.add([
-//     { data: { source: 'node1', target: 'node2' } },
-//     { data: { source: 'node2', target: 'node3' } },
-//     { data: { source: 'node1', target: 'node4' } },
-//     { data: { source: 'node2', target: 'node5' } },
-//     // Ajoutez d'autres arêtes ici...
-//   ]);
-
-//   // Appliquer le layout pour que les nœuds soient bien positionnés
-//   cy.layout({ name: 'grid' }).run();
-
-//   // Récupérer les éléments du graphe sous forme de données JSON
-//   const graphData = cy.json().elements;
-
-//   return graphData;
-// }
 
 // ****************************************************************************************************************************************
 /* 

@@ -1,22 +1,207 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import axios from 'axios';
 import cytoscape from 'cytoscape';
-import coseBilkent from 'cytoscape-cose-bilkent';
+import dagre from 'cytoscape-dagre';
+import klay from 'cytoscape-klay';
+import cola from 'cytoscape-cola';
 import euler from 'cytoscape-euler';
+import spread from 'cytoscape-spread'
+import coseBilkent from 'cytoscape-cose-bilkent';
 
-cytoscape.use(coseBilkent)
+cytoscape.use( dagre )
+cytoscape.use(klay)
+cytoscape.use(cola)
 cytoscape.use(euler)
+cytoscape.use(spread)
+cytoscape.use(coseBilkent)
+
+cytoscape.warnings(false)
+
+const cyContainer = ref(null);
 
 const selectedLayout = ref('preset')
 
-const cyContainer = ref(null);
+const layoutOptions = {
+  preset: {
+    name: 'preset',
+    animate: false,
+    fit: true,
+    animationDuration: 500,
+
+  },
+  null: {
+    name: 'null',
+    animate: false,
+    fit: true,
+  },
+  random: {
+    name: 'random',
+    animate: false,
+    fit: true,
+  },
+  grid: {
+    name: 'grid',
+    animate: false,
+    fit: true,
+    animationDuration: 500,    
+    // uses all available space on false, uses minimal space on true
+    condense: false,
+    // force num of rows in the grid
+    rows: 4, 
+    // force num of columns in the grid 
+    cols: 5, 
+  },
+  circle: {
+    name: 'circle',
+    animate: false,
+    fit: true,
+    // prevents node overlap, may overflow boundingBox and radius if not enough space
+    avoidOverlap: true, 
+    // Excludes the label when calculating node bounding boxes for the layout algorithm
+    nodeDimensionsIncludeLabels: false,
+    // the radius of the circle 
+    radius: undefined,
+    // whether the layout should go clockwise (true) or counterclockwise/anticlockwise (false) 
+    clockwise: true, 
+  },
+  concentric: {
+    name: 'concentric',
+    animate: false,
+    fit: true,
+    // where nodes start in radians
+    startAngle: 3 / 2 * Math.PI, 
+    // whether the layout should go clockwise (true) or counterclockwise/anticlockwise (false)
+    clockwise: true,
+    // whether levels have an equal radial distance betwen them, may cause bounding box overflow 
+    equidistant: false,
+    // min spacing between outside of nodes (used for radius adjustment) 
+    minNodeSpacing: 10, 
+    // height of layout area (overrides container height)
+    height: undefined, 
+    // width of layout area (overrides container width)
+    width: undefined, 
+  },
+  breadthfirst: {
+    name: 'breadthfirst',
+    animate: false,
+    fit: true,
+    // whether the tree is directed downwards (or edges can point in any direction if false)
+    directed: false, 
+    // put depths in concentric circles if true, put depths top down if false
+    circle: false, 
+    // whether to create an even grid into which the DAG is placed (circle:false only)
+    grid: false, 
+    // positive spacing factor, larger => more space between nodes (N.B. n/a if causes overlap)
+    spacingFactor: 1.75, 
+    // prevents node overlap, may overflow boundingBox if not enough space
+    avoidOverlap: true,
+    animationDuration: 500
+  },
+  dagre: {
+    name: 'dagre',
+    animate: false,
+    fit: true,
+  },
+  klay: {
+    name: 'klay',
+    animate: false,
+    fit: true,
+  },
+  cose: {
+    name: 'cose',
+    animate: false,
+    fit: true,
+    animationDuration: undefined,
+    // Number of iterations between consecutive screen positions update
+    refresh: 20,
+    // Excludes the label when calculating node bounding boxes for the layout algorithm
+    nodeDimensionsIncludeLabels: false,
+    // Randomize the initial positions of the nodes (true) or use existing positions (false)
+    randomize: false,
+    // Extra spacing between components in non-compound graphs
+    componentSpacing: 40,
+    // Node repulsion (overlapping) multiplier
+    nodeOverlap: 4,
+    // Maximum number of iterations to perform
+    numIter: 1000,
+  },
+  'cose-bilkent': {
+    name: 'cose-bilkent',
+    animate: false,
+    fit: true,
+    padding: 10,
+    // 'draft', 'default' or 'proof" 
+    // - 'draft' fast cooling rate 
+    // - 'default' moderate cooling rate 
+    // - "proof" slow cooling rate
+    quality: 'default',   
+    // number of ticks per frame; higher is faster but more jerky
+    refresh: 30,   
+    // Whether to enable incremental mode
+    randomize: true, 
+    // Ideal (intra-graph) edge length
+    idealEdgeLength: 50,
+    // Divisor to compute edge forces
+    edgeElasticity: 0.45,
+    // Nesting factor (multiplier) to compute ideal edge length for inter-graph edges
+    nestingFactor: 0.1,    
+    // Maximum number of iterations to perform
+    numIter: 2500,
+    // Whether to tile disconnected nodes
+    tile: true,
+    // Type of layout animation. The option set is {'during', 'end', false}
+    animate: 'end',
+    // Duration for animate:end
+    animationDuration: 500,    
+  },
+  cola: {
+    name: 'cola',
+    animate: false,
+    fit: true,
+  },
+  euler: {
+    name: 'euler',
+    animate: true,
+    fit: true, 
+    // Friction / drag coefficient to make the system stabilise over time
+    dragCoeff: 0.02,
+    // Whether to randomize the initial positions of the nodes
+    // true : Use random positions within the bounding box
+    // false : Use the current node positions as the initial positions
+    randomize: false,
+    // The amount of time passed per tick
+    // - Larger values result in faster runtimes but might spread things out too far
+    // - Smaller values produce more accurate results
+    timeStep: 10,
+    // The number of ticks per frame for animate:true
+    // - A larger value reduces rendering cost but can be jerky
+    // - A smaller value increases rendering cost but is smoother
+    refresh: 10,
+    // Maximum iterations and time (in ms) before the layout will bail out
+    // - A large value may allow for a better result
+    // - A small value may make the layout end prematurely
+    // - The layout may stop before this if it has settled
+    maxIterations: 2000,
+    maxSimulationTime: 7000,
+    // Prevent the user grabbing nodes during the layout (usually with animate:true)
+    ungrabifyWhileSimulating: false,
+  },
+  spread: {
+    name: 'spread',
+    animate: false,
+    fit: true,
+  } 
+};
+
+const changeLayout = () => {
+  drawGraph()
+}
 
 onMounted(async () => {
   try {
     const data = await fetchGraphData();
     console.log(data)
-    initializeCytoscape(data);
+    drawGraph(data);
   } catch (error) {
     console.error(error);
   }
@@ -32,6 +217,7 @@ async function fetchGraphData() {
   }
 }
 
+<<<<<<< HEAD
 function initializeCytoscape(data) {
   cytoscape({
     container: cyContainer.value,
@@ -48,8 +234,87 @@ function initializeCytoscape(data) {
     layout: {
       name: 'preset',
     },
+=======
+const drawGraph = (data) => {
+  const cy = cytoscape({
+  container: cyContainer.value,
+  boxSelectionEnabled: false,
+  autounselectify: true,
+  wheelSensitivity: 0.5,
+  hideEdgesOnViewport: false,
+  textureOnViewport: false,
+  motionBlur: false,
+  elements: data,
+  style: cytoscape.stylesheet()
+    .selector('node')
+    .css({
+      label: 'data(label)',
+      'width': 15,
+      'height': 15,
+      'min-zoomed-font-size': 8,
+      'font-size': 3,
+      'background-color': 'gray',
+      'background-image': [            
+            // 'src/assets/Instagram_icon.png'  
+            'src/assets/controller-classic.png'         
+          ],
+          'background-fit': 'cover cover',
+          'background-clip': 'none',
+          'background-image-opacity': 0.8,  
+    })
+    .selector('edge')
+    .css({
+      label: 'data(name)',
+      'line-color': 'orange',
+      'curve-style': 'unbundled-bezier(multiple)',
+      'min-zoomed-font-size': 8,
+      'font-size': 3,
+
+      'width': 1, // Largeur initiale des edges (peut être ajustée selon les besoins)
+        'line-style': 'solid', // Style initial des edges (peut être ajusté selon les besoins)
+        'overlay-padding': '5px', // Espace autour de l'edge pour améliorer l'interaction        
+    }),
+  layout: {
+    name: 'euler',
+    animate: false,
+    fit: true,
+  }
+});
+
+ // Mettre à jour dynamiquement le style des edges lors de l'événement de zoom
+ cy.on('zoom', (event) => {
+    const currentZoom = event.cy.zoom();
+    const edgeWidth = Math.max(1, 1 / currentZoom); // Calculer la nouvelle largeur des edges en fonction du zoom
+
+    // Mettre à jour le style des edges avec la nouvelle largeur
+    cy.style().selector('edge').style({
+      'width': edgeWidth + 'px', // Mettre à jour la largeur des edges      
+    }).update();
+>>>>>>> 7342b324085fb1b81fc7f14b0bd4a2600cd3bf4c
   });
+
+// cy.on('render', () => {
+//   cy.nodes().forEach((node) => {
+//     const currentZoom = cy.zoom();
+//     const fontSize = 1 * currentZoom;
+
+//     node.style('width', `${10 / currentZoom}px`);
+//     node.style('height', `${10 / currentZoom}px`);
+//     node.style('font-size', `${10 / fontSize}px`);
+//   });
+
+//   cy.edges().forEach((edge) => {
+//     const currentZoom = cy.zoom();
+//     const fontSize = 1 * currentZoom;
+
+//     edge.style('width', 2 / currentZoom);
+//     edge.style('font-size', `${10 / fontSize}px`);
+//     edge.style('curve-style', 'bezier');
+//   });
+// });
+
 }
+
 
 </script>
 
