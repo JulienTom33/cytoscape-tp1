@@ -284,9 +284,10 @@ const drawGraph = async () => {
       
       'width': 1, 
       'line-style': 'solid', 
-      'overlay-padding': '5px',      
+      'overlay-padding': 4,      
     }),
-    layout: layoutOptions[selectedLayout.value]   
+    layout: layoutOptions[selectedLayout.value] ,
+    padding: 10,  
 });
 
 // on zoom-in, the edge's width changed
