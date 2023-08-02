@@ -279,6 +279,8 @@ const drawGraph = (data) => {
 //   });
 // });
 
+}
+
 
 </script>
 
