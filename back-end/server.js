@@ -12,6 +12,9 @@ app.use(cors());
 const filesPath = path.join(__dirname, 'files');
 const filesImgPath = path.join(__dirname, 'files_img');
 
+
+// ****************************************************************************************************************************************
+// CYTOSNAP 
 /* 
 Puppeteer options to display the graph image in the Web browser
 */
@@ -63,6 +66,7 @@ const graphElements = (graphData) => {
 function to generate a graph image with cytosnap
 */
 cytosnap.use(['cytoscape-dagre', 'cytoscape-cose-bilkent', 'cytoscape-euler', 'cytoscape-klay', 'cytoscape-cola', 'cytoscape-spread']);
+
 const generateGraphImage = async (graphData) => {
   try {
     const snap = cytosnap(options);
@@ -133,60 +137,14 @@ app.get('/api/files_img/:fileName', async (req, res) => {
   }
 });
 
-
-/* 
-To get a file in the files directory
-*/
-app.get('/api/files/:fileName', (req, res) => {
-  const { fileName } = req.params;
-  const filePath = path.join(filesPath, `${fileName}.json`);
-  // console.log(filePath)
-
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      return res.status(404).json({ error: 'File not found' });
-    }
-    res.json(JSON.parse(data));
-  });
-});
-
-/* 
-To get all the files in the files directory
-*/
-function getAllFiles() {
-  const jsonFiles = [];
-  const files = fs.readdirSync(filesPath);
-
-  files.forEach(file => {
-    if (path.extname(file) === '.json') {
-      const filePath = path.join(filesPath, file);
-      const fileData = fs.readFileSync(filePath, 'utf8');
-
-      try {
-        const jsonData = JSON.parse(fileData);
-        jsonFiles.push(jsonData);
-      } catch (err) {
-        console.error(`Error parsing JSON file: ${file}`);
-      }
-    }
-  });
-  return jsonFiles;
-}
-app.get('/api/files', (req, res) => {
-  const allFiles = getAllFiles();
-  res.json(allFiles);
-  // console.log(allFiles)
-});
-
 // ****************************************************************************************************************************************
 // CYTOSCAPE SERVER TEST
 
-// Chemin du fichier JSON dans le dossier "files"
-const filePath = path.join(__dirname, 'files', 'nba-20.json');
-
 
 // Route pour récupérer le graphe généré avec Cytoscape depuis le fichier JSON
-app.get('/api/graph', (req, res) => {
+app.get('/api/graph/files/:fileName', (req, res) => {
+  const { fileName } = req.params;
+  const filePath = path.join(filesPath, `${fileName}.json`);
   try {
     const graphData = createGraphFromJSON(filePath);
     // console.log(graphData);
@@ -233,6 +191,54 @@ function createGraphFromJSON(filePath) {
 }
 
 // ****************************************************************************************************************************************
+
+
+/* 
+To get a file in the files directory
+*/
+app.get('/api/files/:fileName', (req, res) => {
+  const { fileName } = req.params;
+  const filePath = path.join(filesPath, `${fileName}.json`);
+  // console.log(filePath)
+
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(404).json({ error: 'File not found' });
+    }
+    res.json(JSON.parse(data));
+  });
+});
+
+/* 
+To get all the files in the files directory
+*/
+function getAllFiles() {
+  const jsonFiles = [];
+  const files = fs.readdirSync(filesPath);
+
+  files.forEach(file => {
+    if (path.extname(file) === '.json') {
+      const filePath = path.join(filesPath, file);
+      const fileData = fs.readFileSync(filePath, 'utf8');
+
+      try {
+        const jsonData = JSON.parse(fileData);
+        jsonFiles.push(jsonData);
+      } catch (err) {
+        console.error(`Error parsing JSON file: ${file}`);
+      }
+    }
+  });
+  return jsonFiles;
+}
+app.get('/api/files', (req, res) => {
+  const allFiles = getAllFiles();
+  res.json(allFiles);
+  // console.log(allFiles)
+});
+
+// ****************************************************************************************************************************************
+
 /* 
 server port
 */

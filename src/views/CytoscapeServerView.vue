@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue';
+import axios from 'axios'
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import klay from 'cytoscape-klay';
@@ -8,6 +9,9 @@ import euler from 'cytoscape-euler';
 import spread from 'cytoscape-spread'
 import coseBilkent from 'cytoscape-cose-bilkent';
 
+/* 
+cytoscape layouts import
+*/
 cytoscape.use( dagre )
 cytoscape.use(klay)
 cytoscape.use(cola)
@@ -17,10 +21,24 @@ cytoscape.use(coseBilkent)
 
 cytoscape.warnings(false)
 
-const cyContainer = ref(null);
-
+/* 
+function which load the graph dependaing the layout selected
+*/
 const selectedLayout = ref('preset')
+const changeLayout = () => {
+  drawGraph()
+}
 
+/* 
+function to change the network with the select
+*/
+const getNetwork = async () => {
+  drawGraph();
+};
+
+/* 
+Layout options
+*/
 const layoutOptions = {
   preset: {
     name: 'preset',
@@ -193,31 +211,40 @@ const layoutOptions = {
   } 
 };
 
-const changeLayout = () => {
-  drawGraph()
-}
-
-onMounted(async () => {
-  try {
-    const data = await fetchGraphData();
-    console.log(data)
-    drawGraph(data);
-  } catch (error) {
-    console.error(error);
+/* 
+function to get the nodes and the edges depending the json structure
+*/
+const graphElements = (response) => {
+  const data = response.data;
+  let nodes = [];
+  let edges = [];
+  if (data.nodes && data.edges) {
+    nodes = data.nodes;
+    edges = data.edges;
+  } else if (data.elements && Array.isArray(data.elements)) {  
+    nodes = data.elements.filter((element) => element.group === 'nodes');
+    edges = data.elements.filter((element) => element.group === 'edges');
+  } else if (data.elements && data.elements.nodes && data.elements.edges) {
+    nodes = data.elements.nodes;
+    edges = data.elements.edges;
   }
-});
+  return { nodes, edges };
+};
 
-async function fetchGraphData() {
-  try {
-    const response = await fetch('http://localhost:3000/api/graph');
-    return await response.json();
-  } catch (error) {
-    console.error('Failed to fetch graph data:', error);
-    throw error;
-  }
-}
+/* 
+function to build the graph with cytoscape
+*/
+const cyContainer = ref(null);
+const drawGraph = async () => {
 
-<<<<<<< HEAD
+  const selectElement = document.getElementById('selectNetwork');
+  const selectedValue = selectElement.value;
+  
+  const response = await axios.get(`http://localhost:3000/api/files/${selectedValue}`)
+  const graphData = response.data.elements;
+  console.log(graphData)
+  
+  <<<<<<< HEAD
 function initializeCytoscape(data) {
   cytoscape({
     container: cyContainer.value,
@@ -235,17 +262,20 @@ function initializeCytoscape(data) {
       name: 'preset',
     },
 =======
-const drawGraph = (data) => {
+const { nodes, edges } = graphElements(response);
+
   const cy = cytoscape({
-  container: cyContainer.value,
-  boxSelectionEnabled: false,
-  autounselectify: true,
-  wheelSensitivity: 0.5,
-  hideEdgesOnViewport: false,
-  textureOnViewport: false,
-  motionBlur: false,
-  elements: data,
-  style: cytoscape.stylesheet()
+    container: cyContainer.value,
+    boxSelectionEnabled: false,
+    autounselectify: true,
+    wheelSensitivity: 0.5,
+    hideEdgesOnViewport: false,
+    textureOnViewport: false,
+    motionBlur: false,
+    elements: {
+      nodes, edges
+    },
+    style: cytoscape.stylesheet()
     .selector('node')
     .css({
       label: 'data(label)',
@@ -255,12 +285,12 @@ const drawGraph = (data) => {
       'font-size': 3,
       'background-color': 'gray',
       'background-image': [            
-            // 'src/assets/Instagram_icon.png'  
-            'src/assets/controller-classic.png'         
-          ],
-          'background-fit': 'cover cover',
-          'background-clip': 'none',
-          'background-image-opacity': 0.8,  
+        // 'src/assets/Instagram_icon.png'  
+        'src/assets/controller-classic.png'         
+      ],
+      'background-fit': 'cover cover',
+      'background-clip': 'none',
+      'background-image-opacity': 0.8,  
     })
     .selector('edge')
     .css({
@@ -269,53 +299,30 @@ const drawGraph = (data) => {
       'curve-style': 'unbundled-bezier(multiple)',
       'min-zoomed-font-size': 8,
       'font-size': 3,
-
-      'width': 1, // Largeur initiale des edges (peut être ajustée selon les besoins)
-        'line-style': 'solid', // Style initial des edges (peut être ajusté selon les besoins)
-        'overlay-padding': '5px', // Espace autour de l'edge pour améliorer l'interaction        
+      
+      'width': 1, 
+      'line-style': 'solid', 
+      'overlay-padding': '5px',      
     }),
-  layout: {
-    name: 'euler',
-    animate: false,
-    fit: true,
-  }
+    layout: layoutOptions[selectedLayout.value]   
 });
 
- // Mettre à jour dynamiquement le style des edges lors de l'événement de zoom
- cy.on('zoom', (event) => {
-    const currentZoom = event.cy.zoom();
-    const edgeWidth = Math.max(1, 1 / currentZoom); // Calculer la nouvelle largeur des edges en fonction du zoom
-
-    // Mettre à jour le style des edges avec la nouvelle largeur
-    cy.style().selector('edge').style({
-      'width': edgeWidth + 'px', // Mettre à jour la largeur des edges      
-    }).update();
+// on zoom-in, the edge's width changed
+cy.on('zoom', (event) => {
+  const currentZoom = event.cy.zoom();
+  const edgeWidth = Math.max(1, 1 / currentZoom);  
+  
+  cy.style().selector('edge').style({
+    'width': edgeWidth + 'px'    
+  }).update();
 >>>>>>> 7342b324085fb1b81fc7f14b0bd4a2600cd3bf4c
-  });
-
-// cy.on('render', () => {
-//   cy.nodes().forEach((node) => {
-//     const currentZoom = cy.zoom();
-//     const fontSize = 1 * currentZoom;
-
-//     node.style('width', `${10 / currentZoom}px`);
-//     node.style('height', `${10 / currentZoom}px`);
-//     node.style('font-size', `${10 / fontSize}px`);
-//   });
-
-//   cy.edges().forEach((edge) => {
-//     const currentZoom = cy.zoom();
-//     const fontSize = 1 * currentZoom;
-
-//     edge.style('width', 2 / currentZoom);
-//     edge.style('font-size', `${10 / fontSize}px`);
-//     edge.style('curve-style', 'bezier');
-//   });
-// });
-
+});      
 }
 
-
+onMounted(async () => {
+    drawGraph()    
+});    
+    
 </script>
 
 <template>
@@ -340,6 +347,8 @@ const drawGraph = (data) => {
       <option value="updated_tgca_concentric_communities">tgca communities</option>
       <option value="nba-10">nb-groups (10000)</option>
       <option value="nba-20">nb-groups (20000)</option>
+      <option value="updated_affinity_purification_communities_spheres">purif_diago</option>
+      <option value="updated_affinity_purification_communities_spheres">purif_louvain_spheres</option>
     </select>
 
     <label for="layout">Layout: </label>
@@ -360,10 +369,10 @@ const drawGraph = (data) => {
       <option value="spread">spread</option>           
     </select>
   </header>
-  <div ref="cyContainer" id="cy"></div>
-  <!-- <div id="cy"></div> -->
-</template>
 
+  <div ref="cyContainer" id="cy"></div>  
+
+</template>
 
 <style scoped>
 .header {  
@@ -373,11 +382,11 @@ const drawGraph = (data) => {
   padding: 10px; 
 }
 
-
 #cy {
   width: 100%;
   height: 90%;
   position: absolute;
   top: 70px;
   left: 0;
-}</style>
+}
+</style>
