@@ -351,6 +351,7 @@ onMounted(async ()=>{
       <option value="nba-20">nb-groups (20000)</option>
       <option value="updated_affinity_purification_communities_spheres">purif_diago</option>
       <option value="updated_affinity_purification_communities_spheres">purif_louvain_spheres</option>
+      <option value="updated_affinity_purification_LPA_communities_spheres">purif LPA spheres</option>
     </select>
 
     <label for="layout">Layout: </label>

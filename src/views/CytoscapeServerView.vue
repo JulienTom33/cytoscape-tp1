@@ -46,7 +46,7 @@ function initializeCytoscape(data) {
       },
     ],
     layout: {
-      name: 'euler',
+      name: 'preset',
     },
   });
 }
