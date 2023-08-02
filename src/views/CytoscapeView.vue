@@ -9,7 +9,9 @@ import euler from 'cytoscape-euler';
 import spread from 'cytoscape-spread'
 import coseBilkent from 'cytoscape-cose-bilkent';
 
-
+/* 
+cytoscape layouts import
+*/
 cytoscape.use( dagre )
 cytoscape.use(klay)
 cytoscape.use(cola)
@@ -17,9 +19,11 @@ cytoscape.use(euler)
 cytoscape.use(spread)
 cytoscape.use(coseBilkent)
 
-
 cytoscape.warnings(false)
 
+/* 
+function to get all the jsons 
+*/
 const getAllFiles = async () => {
   try {
     const response = await axios.get('http://localhost:3000/api/files/');
@@ -30,116 +34,24 @@ const getAllFiles = async () => {
   }
 };
 
+/* 
+function which load the graph dependaing the layout selected
+*/
+const selectedLayout = ref('preset')
+const changeLayout = () => {
+  drawGraph()
+}
+
+/* 
+function to change the network with the select
+*/
 const getNetwork = async () => {
   drawGraph();
 };
 
-const graphElements = (response) => {
-  const data = response.data;
-  let nodes = [];
-  let edges = [];
-  if (data.nodes && data.edges) {
-    nodes = data.nodes;
-    edges = data.edges;
-  } else if (data.elements && Array.isArray(data.elements)) {  
-    nodes = data.elements.filter((element) => element.group === 'nodes');
-    edges = data.elements.filter((element) => element.group === 'edges');
-  } else if (data.elements && data.elements.nodes && data.elements.edges) {
-    nodes = data.elements.nodes;
-    edges = data.elements.edges;
-  }
-  return { nodes, edges };
-};
-
-
-
-const drawGraph = async () => {
-  try {
-
-    const selectElement = document.getElementById('selectNetwork');
-    const selectedValue = selectElement.value;
-
-    const response = await axios.get(`http://localhost:3000/api/files/${selectedValue}`)
-    const graphData = response.data.elements;
-    console.log(graphData)  
-
-    const { nodes, edges } = graphElements(response);
-    const cy = cytoscape({      
-      container: document.getElementById('cy'),
-      boxSelectionEnabled: false,
-      autounselectify: true,
-      wheelSensitivity: 0.2,
-      hideEdgesOnViewport: false,
-      textureOnViewport: false,
-      motionBlur: false, 
-      style: cytoscape
-        .stylesheet()
-        .selector('node')
-        .css({   
-          label: 'data(label)',
-          'width': 100,
-          'height': 100,          
-          'min-zoomed-font-size': 8,
-          'font-size': 7,          
-          'background-color': 'gray',
-          'background-image': [            
-            // 'src/assets/Instagram_icon.png'  
-            'src/assets/controller-classic.png'         
-          ],
-          'background-fit': 'cover cover',
-          'background-clip': 'none',
-          'background-image-opacity': 0.8,                          
-        })
-        .selector('edge')
-        .css({ 
-            label: 'data(name)',      
-           'line-color': 'blue',
-           'curve-style' : 'unbundled-bezier(multiple)', 
-           'min-zoomed-font-size': 8,
-           'font-size': 7,
-
-        }),
-        elements: {  
-          nodes,
-          edges
-        },
-        layout: layoutOptions[selectedLayout.value],
-        // layout: {
-          
-        //   name: selectedLayout.value,
-        //   animate: false,
-        //   fit: true,                  
-        // }
-      });
-      
-      cy.on('render', () => {
-      cy.nodes().forEach((node) => {
-        const currentZoom = cy.zoom();
-        const fontSize = 1 * currentZoom;
-        
-        node.style('width', `${10 / currentZoom}px`);
-        node.style('height', `${10 / currentZoom}px`);
-        node.style('font-size', `${fontSize}px`);
-      });
-
-      cy.edges().forEach((edge) => {
-        const currentZoom = cy.zoom();
-        const fontSize = 1 * currentZoom;
-       
-        edge.style('width', 2 / currentZoom);
-        edge.style('font-size', `${fontSize}px`);
-        edge.style('curve-style', 'bezier' )
-      });
-    });
-      
-
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const selectedLayout = ref('preset')
-
+/* 
+Layout options
+*/
 const layoutOptions = {
   preset: {
     name: 'preset',
@@ -312,12 +224,107 @@ const layoutOptions = {
   } 
 };
 
-// const changeLayout = () => {
-//   drawGraph(selectedLayout);
-// };
-const changeLayout = () => {
-  drawGraph()
-}
+/* 
+function to get the nodes and the edges depending the json structure
+*/
+const graphElements = (response) => {
+  const data = response.data;
+  let nodes = [];
+  let edges = [];
+  if (data.nodes && data.edges) {
+    nodes = data.nodes;
+    edges = data.edges;
+  } else if (data.elements && Array.isArray(data.elements)) {  
+    nodes = data.elements.filter((element) => element.group === 'nodes');
+    edges = data.elements.filter((element) => element.group === 'edges');
+  } else if (data.elements && data.elements.nodes && data.elements.edges) {
+    nodes = data.elements.nodes;
+    edges = data.elements.edges;
+  }
+  return { nodes, edges };
+};
+
+/* 
+function to build the graph with cytoscape
+*/
+const cyContainer = ref(null);
+const drawGraph = async () => {
+  try {
+
+    const selectElement = document.getElementById('selectNetwork');
+    const selectedValue = selectElement.value;
+
+    const response = await axios.get(`http://localhost:3000/api/files/${selectedValue}`)
+    const graphData = response.data.elements;
+    console.log(graphData)  
+
+    const { nodes, edges } = graphElements(response);
+    const cy = cytoscape({      
+      container: document.getElementById('cy'),
+      boxSelectionEnabled: false,
+      autounselectify: true,
+      wheelSensitivity: 0.2,
+      hideEdgesOnViewport: false,
+      textureOnViewport: false,
+      motionBlur: false, 
+      style: cytoscape
+        .stylesheet()
+        .selector('node')
+        .css({   
+          label: 'data(label)',
+          'width': 100,
+          'height': 100,          
+          'min-zoomed-font-size': 8,
+          'font-size': 7,          
+          'background-color': 'gray',
+          'background-image': [            
+            // 'src/assets/Instagram_icon.png'  
+            'src/assets/controller-classic.png'         
+          ],
+          'background-fit': 'cover cover',
+          'background-clip': 'none',
+          'background-image-opacity': 0.8,                          
+        })
+        .selector('edge')
+        .css({ 
+            label: 'data(name)',      
+           'line-color': 'blue',
+           'curve-style' : 'unbundled-bezier(multiple)', 
+           'min-zoomed-font-size': 8,
+           'font-size': 7
+        }),
+        elements: {  
+          nodes,
+          edges
+        },
+        layout: layoutOptions[selectedLayout.value]        
+      });
+      
+      // on zoom-in, the nodes and the edges style change
+      cy.on('render', () => {
+      cy.nodes().forEach((node) => {
+        const currentZoom = cy.zoom();
+        const fontSize = 1 * currentZoom;
+        
+        node.style('width', `${10 / currentZoom}px`);
+        node.style('height', `${10 / currentZoom}px`);
+        node.style('font-size', `${fontSize}px`);
+      });
+
+      cy.edges().forEach((edge) => {
+        const currentZoom = cy.zoom();
+        const fontSize = 1 * currentZoom;
+       
+        edge.style('width', 2 / currentZoom);
+        edge.style('font-size', `${fontSize}px`);
+        edge.style('curve-style', 'bezier' )
+      });
+    });      
+
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 onMounted(async ()=>{
   drawGraph()
@@ -372,19 +379,17 @@ onMounted(async ()=>{
     </select>
   </header>
 
-  <div id="cy"></div>
+  <div ref="cyContainer" id="cy"></div>
 
 </template>
 
 <style scoped>
-
 .header {  
   position: absolute;
   top: 0;
   right: 20px;
   padding: 10px; 
 }
-
 
 #cy {
   width: 100%;
