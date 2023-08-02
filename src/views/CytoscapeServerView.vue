@@ -2,14 +2,29 @@
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
 import cytoscape from 'cytoscape';
+import coseBilkent from 'cytoscape-cose-bilkent';
+import euler from 'cytoscape-euler';
+
+cytoscape.use(coseBilkent)
+cytoscape.use(euler)
 
 const selectedLayout = ref('preset')
 
 const cyContainer = ref(null);
 
+onMounted(async () => {
+  try {
+    const data = await fetchGraphData();
+    console.log(data)
+    initializeCytoscape(data);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 async function fetchGraphData() {
   try {
-    const response = await axios.get('http://localhost:3000/api/graph');
+    const response = await fetch('http://localhost:3000/api/graph');
     return await response.json();
   } catch (error) {
     console.error('Failed to fetch graph data:', error);
@@ -21,20 +36,21 @@ function initializeCytoscape(data) {
   cytoscape({
     container: cyContainer.value,
     elements: data,
+    style: [
+      {
+        selector: 'node',
+        style: {
+          'background-color': '#ff5733',
+          label: 'data(label)',
+        },
+      },
+    ],
     layout: {
-      name: 'grid',
+      name: 'euler',
     },
   });
 }
 
-onMounted(async () => {
-  try {
-    const data = await fetchGraphData();
-    initializeCytoscape(data);
-  } catch (error) {
-    console.error(error);
-  }
-});
 </script>
 
 <template>
@@ -79,7 +95,7 @@ onMounted(async () => {
       <option value="spread">spread</option>           
     </select>
   </header>
-  <div ref="cyContainer"></div>
+  <div ref="cyContainer" id="cy"></div>
   <!-- <div id="cy"></div> -->
 </template>
 
