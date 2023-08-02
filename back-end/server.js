@@ -182,13 +182,13 @@ app.get('/api/files', (req, res) => {
 // CYTOSCAPE SERVER TEST
 
 // Chemin du fichier JSON dans le dossier "files"
-const filePath = path.join(__dirname, 'files', 'nba-20.json');
+const filePath = path.join(__dirname, 'files', 'soplon.json');
 
 // Route pour récupérer le graphe généré avec Cytoscape depuis le fichier JSON
 app.get('/api/graph', (req, res) => {
   try {
     const graphData = createGraphFromJSON(filePath);
-    // console.log(graphData);
+    console.log(graphData);
     res.json(graphData);
   } catch (error) {
     console.error(error);
@@ -202,26 +202,25 @@ function createGraphFromJSON(filePath) {
 
   try {
     const jsonData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    // console.log(jsonData)
     let nodes = [];
     let edges = [];
 
-    
-    if (Array.isArray(jsonData)) {
-      nodes = jsonData.filter((element) => element.group === 'nodes');
-      edges = jsonData.filter((element) => element.group === 'edges');
-    } else {     
-      if (!jsonData.elements || !jsonData.elements.nodes || !jsonData.elements.edges) {
-        throw new Error('Le fichier JSON doit contenir les propriétés "elements", "nodes" et "edges".');
-      }
-
-      nodes = jsonData.elements.nodes;
-      edges = jsonData.elements.edges;
+    // Vérifier que le fichier JSON contient les propriétés 'nodes' et 'edges'
+    if (!jsonData.nodes || !jsonData.edges) {
+      throw new Error('Le fichier JSON doit contenir les propriétés "nodes" et "edges".');
     }
-   
+
+    nodes = jsonData.nodes;
+    edges = jsonData.edges;
+
+    // Ajouter les nœuds et les arêtes au graphe
     cy.add(nodes.concat(edges));
-    
+
+    // Appliquer le layout pour que les nœuds soient bien positionnés
     cy.layout({ name: 'preset' }).run();
-   
+
+    // Récupérer les éléments du graphe sous forme de données JSON
     const graphData = cy.json().elements;
 
     return graphData;
@@ -229,6 +228,36 @@ function createGraphFromJSON(filePath) {
     console.error('Erreur lors de la création du graphe à partir du fichier JSON:', error);
     throw error;
   }
+
+  // try {
+  //   const jsonData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  //   let nodes = [];
+  //   let edges = [];
+
+    
+  //   if (Array.isArray(jsonData)) {
+  //     nodes = jsonData.filter((element) => element.group === 'nodes');
+  //     edges = jsonData.filter((element) => element.group === 'edges');
+  //   } else {     
+  //     if (!jsonData.elements || !jsonData.elements.nodes || !jsonData.elements.edges) {
+  //       throw new Error('Le fichier JSON doit contenir les propriétés "elements", "nodes" et "edges".');
+  //     }
+
+  //     nodes = jsonData.elements.nodes;
+  //     edges = jsonData.elements.edges;
+  //   }
+   
+  //   cy.add(nodes.concat(edges));
+    
+  //   cy.layout({ name: 'grid' }).run();
+   
+  //   const graphData = cy.json().elements;
+
+  //   return graphData;
+  // } catch (error) {
+  //   console.error('Erreur lors de la création du graphe à partir du fichier JSON:', error);
+  //   throw error;
+  // }
 }
 
 // // Route pour récupérer le graphe généré avec Cytoscape
