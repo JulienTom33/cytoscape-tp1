@@ -231,10 +231,10 @@ const drawGraph = (data) => {
     .selector('node')
     .css({
       label: 'data(label)',
-      'width': 100,
-      'height': 100,
+      'width': 15,
+      'height': 15,
       'min-zoomed-font-size': 8,
-      'font-size': 7,
+      'font-size': 3,
       'background-color': 'gray',
       'background-image': [            
             // 'src/assets/Instagram_icon.png'  
@@ -250,7 +250,11 @@ const drawGraph = (data) => {
       'line-color': 'orange',
       'curve-style': 'unbundled-bezier(multiple)',
       'min-zoomed-font-size': 8,
-      'font-size': 7,
+      'font-size': 3,
+
+      'width': 1, // Largeur initiale des edges (peut être ajustée selon les besoins)
+        'line-style': 'solid', // Style initial des edges (peut être ajusté selon les besoins)
+        'overlay-padding': '5px', // Espace autour de l'edge pour améliorer l'interaction        
     }),
   layout: {
     name: 'euler',
@@ -258,6 +262,17 @@ const drawGraph = (data) => {
     fit: true,
   }
 });
+
+ // Mettre à jour dynamiquement le style des edges lors de l'événement de zoom
+ cy.on('zoom', (event) => {
+    const currentZoom = event.cy.zoom();
+    const edgeWidth = Math.max(1, 1 / currentZoom); // Calculer la nouvelle largeur des edges en fonction du zoom
+
+    // Mettre à jour le style des edges avec la nouvelle largeur
+    cy.style().selector('edge').style({
+      'width': edgeWidth + 'px', // Mettre à jour la largeur des edges      
+    }).update();
+  });
 
 // cy.on('render', () => {
 //   cy.nodes().forEach((node) => {
