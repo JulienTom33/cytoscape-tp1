@@ -79,7 +79,8 @@
                 "background-width": 4,
                 "background-height": 4,
                 "background-image-opacity": 0.8,
-                "background-clip": "none" 
+                "background-clip": "none" ,
+                "background-repeat": "no-repeat" 
               },
             "group": "nodes",
             "removed": false,
@@ -167,7 +168,8 @@
                 "background-width": 4,
                 "background-height": 4,
                 "background-image-opacity": 0.8,
-                "background-clip": "none"  
+                "background-clip": "none" ,
+                "background-repeat": "no-repeat"  
               },
             "group": "nodes",
             "removed": false,
@@ -254,7 +256,8 @@
                 "background-width": "25px",
                 "background-height": "25px",
                 "background-image-opacity": 0.8,
-                "background-clip": "none"                 
+                "background-clip": "none",
+                "background-repeat": "no-repeat"                  
               },
             "group": "nodes",
             "removed": false,
@@ -341,7 +344,8 @@
                 "background-width": "25px",
                 "background-height": "25px",
                 "background-image-opacity": 0.8,
-                "background-clip": "none"                 
+                "background-clip": "none",
+                "background-repeat": "no-repeat"                  
               },
             "group": "nodes",
             "removed": false,
@@ -428,7 +432,8 @@
                 "background-width": "25px",
                 "background-height": "25px",
                 "background-image-opacity": 0.8,
-                "background-clip": "none"                 
+                "background-clip": "none",
+                "background-repeat": "no-repeat"                  
               },            
             "group": "nodes",
             "removed": false,
@@ -515,7 +520,8 @@
                 "background-width": "25px",
                 "background-height": "25px",
                 "background-image-opacity": 0.8,
-                "background-clip": "none"                 
+                "background-clip": "none",
+                "background-repeat": "no-repeat"                  
               },             
             "group": "nodes",
             "removed": false,
