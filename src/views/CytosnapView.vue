@@ -12,7 +12,7 @@ const getAllFiles = async () => {
   }
 };
 
-const graphImage = ref('');
+const graphImage = ref(null);
 
 const zoomLevel = ref(100); 
 const maxZoomLevel = 1000; 
@@ -50,8 +50,8 @@ const zoomStyle = computed(() => ({
 }));
 
 onMounted(async ()=>{   
-    loadGraphImage(); 
-    getAllFiles()      
+  await loadGraphImage(); 
+  getAllFiles()      
   }); 
 
 </script>
@@ -82,10 +82,12 @@ onMounted(async ()=>{
       <option value="updated_affinity_purification_communities_spheres">purif_louvain_spheres</option>
       </select>      
     </header> 
-    
+
+
     <div @wheel="handleMouseWheel">     
       <img :src="graphImage" alt="Graph" :style="zoomStyle" class="graphImage" />      
     </div>
+  
 
   </template>
 
