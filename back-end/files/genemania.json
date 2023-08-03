@@ -1,7 +1,7 @@
 {
     "elements": [
         {
-            "data": {
+            "data": {                 
                 "oldEle": false,
                 "id": "629754",
                 "idInt": 629754,
@@ -65,12 +65,19 @@
                 "preForcePos": {
                     "x": 615.5,
                     "y": 349.5
-                }                               
+                }                                                      
             },
             "position": {
                 "x": 481.18487826644696,
                 "y": 447.74909286468136
             },
+            "style": {
+                "background-image": [                 
+                  "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Pigeon_silhouette_4874.svg/1000px-Pigeon_silhouette_4874.svg.png"
+                ],
+                "background-fit": "cover cover",
+                "background-image-opacity": 0.5
+              },
             "group": "nodes",
             "removed": false,
             "selected": false,
@@ -149,6 +156,13 @@
                 "x": 512.1410668056739,
                 "y": 328.5768468364667
             },
+            "style": {
+                "background-image": [
+                  "https://upload.wikimedia.org/wikipedia/commons/f/ff/%21icon.png"                
+                ],
+                "background-fit": "cover cover",
+                "background-image-opacity": 0.5
+              },
             "group": "nodes",
             "removed": false,
             "selected": false,
