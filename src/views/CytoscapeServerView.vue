@@ -246,7 +246,15 @@ const drawGraph = async () => {
             'height': 20,                  
             'background-clip': 'none',
             'min-zoomed-font-size': 8,
-            'font-size': 3,     
+            'font-size': 3, 
+            "background-image": [
+                  "https://upload.wikimedia.org/wikipedia/commons/9/92/MK_road_sign_251.svg"                
+                ],                
+                "background-width": "25px",
+                "background-height": "25px",
+                "background-image-opacity": 0.8,
+                "background-clip": "none",
+                "background-repeat": "no-repeat"      
                                 
           }
         },
