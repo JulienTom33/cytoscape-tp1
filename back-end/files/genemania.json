@@ -76,7 +76,10 @@
                   "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Pigeon_silhouette_4874.svg/1000px-Pigeon_silhouette_4874.svg.png"
                 ],
                 "background-fit": "cover cover",
-                "background-image-opacity": 0.5
+                "background-width": 4,
+                "background-height": 4,
+                "background-image-opacity": 0.8,
+                "background-clip": "none" 
               },
             "group": "nodes",
             "removed": false,
@@ -161,7 +164,10 @@
                   "https://upload.wikimedia.org/wikipedia/commons/f/ff/%21icon.png"                
                 ],
                 "background-fit": "cover cover",
-                "background-image-opacity": 0.5
+                "background-width": 4,
+                "background-height": 4,
+                "background-image-opacity": 0.8,
+                "background-clip": "none"  
               },
             "group": "nodes",
             "removed": false,
@@ -241,6 +247,15 @@
                 "x": 523.0805123592361,
                 "y": 701.3351640609811
             },
+            "style": {
+                "background-image": [
+                  "https://upload.wikimedia.org/wikipedia/commons/5/5a/Mountain_Icon.svg"                
+                ],                
+                "background-width": "25px",
+                "background-height": "25px",
+                "background-image-opacity": 0.8,
+                "background-clip": "none"                 
+              },
             "group": "nodes",
             "removed": false,
             "selected": false,
@@ -319,6 +334,15 @@
                 "x": 346.8429921157798,
                 "y": 511.09602664177663
             },
+            "style": {
+                "background-image": [
+                  "https://upload.wikimedia.org/wikipedia/commons/4/41/Israel_road_sign_304.svg"                
+                ],                
+                "background-width": "25px",
+                "background-height": "25px",
+                "background-image-opacity": 0.8,
+                "background-clip": "none"                 
+              },
             "group": "nodes",
             "removed": false,
             "selected": false,
@@ -397,6 +421,15 @@
                 "x": 726.5993067789493,
                 "y": 432.1195530623968
             },
+            "style": {
+                "background-image": [
+                  "https://upload.wikimedia.org/wikipedia/commons/2/25/Australia_road_sign_W5-48.svg"                
+                ],                
+                "background-width": "25px",
+                "background-height": "25px",
+                "background-image-opacity": 0.8,
+                "background-clip": "none"                 
+              },            
             "group": "nodes",
             "removed": false,
             "selected": false,

@@ -15,7 +15,7 @@ const getAllFiles = async () => {
 const graphImage = ref('');
 
 const zoomLevel = ref(100); 
-const maxZoomLevel = 500; 
+const maxZoomLevel = 1000; 
 const minZoomLevel = 20;
 
 const getNetwork = async () => {

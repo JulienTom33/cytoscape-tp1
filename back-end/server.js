@@ -86,26 +86,14 @@ const generateGraphImage = async (graphData) => {
                 {
                   selector: 'node',                  
                   style: {
-                    'background-color': 'white', 
+                    'background-color': '#8ec8d4', 
                     'border-width': '2px',
                     'border-style': 'solid',
                     'border-color': '#148196',
-                    'width': 25,
-                    'height': 25, 
-                    
-                    // 'background-image': [   
-                    //   // 'data(image)',                   
-                    //   // './assets/Instagram_icon.png' 
-                    //   // 'https://upload.wikimedia.org/wikipedia/commons/b/b4/High_above_the_Cloud_the_Sun_Stays_the_Same.jpg',
-                    //   // 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Pigeon_silhouette_4874.svg/1000px-Pigeon_silhouette_4874.svg.png',                      
-                    // ],
-                    'background-width': '50px',
-                    'background-height': '50px',
-                    // 'background-fit': 'cover cover',
-                    // 'background-image-opacity': 0.8,
+                    'width': 30,
+                    'height': 30,                  
                     'background-clip': 'none',
-                  }             
-                
+                  }                 
                 },                
                 {
                   selector: 'edge',
