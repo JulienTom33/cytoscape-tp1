@@ -260,7 +260,8 @@ const drawGraph = async () => {
       
             'width': 1, 
             'line-style': 'solid', 
-            'overlay-padding': 4,   
+            'overlay-padding': 4, 
+            'opacity' : 0.3  
           }
         }
       ],

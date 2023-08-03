@@ -78,6 +78,8 @@ onMounted(async ()=>{
         <option value="updated_tgca_concentric_communities">tgca communities</option>
         <option value="nba-10">nb-groups (10000)</option>
         <option value="nba-20">nb-groups (20000)</option>
+        <option value="updated_affinity_purification_communities_spheres">purif_diago</option>
+      <option value="updated_affinity_purification_communities_spheres">purif_louvain_spheres</option>
       </select>      
     </header> 
     

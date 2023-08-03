@@ -86,28 +86,37 @@ const generateGraphImage = async (graphData) => {
                 {
                   selector: 'node',                  
                   style: {
-                    'background-color': 'blue',                   
-                    'background-image': [            
-                      // '/assets/Instagram_icon.png'  
-                      'back-end/assets/controller-classic.png'              
-                               
+                    'background-color': 'white', 
+                    'border-width': '2px',
+                    'border-style': 'solid',
+                    'border-color': '#148196',
+                    'width': 25,
+                    'height': 25, 
+                    'background-image': [
+                      // './assets/Instagram_icon.png' 
+                      // 'https://upload.wikimedia.org/wikipedia/commons/b/b4/High_above_the_Cloud_the_Sun_Stays_the_Same.jpg',
+                      'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Pigeon_silhouette_4874.svg/1000px-Pigeon_silhouette_4874.svg.png',                      
                     ],
+                    'background-width': '50px',
+                    'background-height': '50px',
                     'background-fit': 'cover cover',
+                    'background-image-opacity': 0.8,
                     'background-clip': 'none',
-                    'background-image-opacity': 0.8, 
-                  },
+                  }             
+                
                 },
                 {
                   selector: 'edge',
                   style: {
-                    'line-color': 'red',
+                    'line-color': '#636161',
+                    'curve-style': 'unbundled-bezier',
                   },
                 },
       ],
       resolvesTo: 'base64uri',
       format: 'png',
-      width: 1920,
-      height: 1080,
+      width: 3840,
+      height: 2160,
       background: 'transparent'      
     });
 
@@ -141,7 +150,9 @@ app.get('/api/files_img/:fileName', async (req, res) => {
 // CYTOSCAPE SERVER TEST
 
 
-// // Route pour récupérer le graphe généré avec Cytoscape depuis le fichier JSON
+/* 
+route to create the graph data from the json selected in the front-end
+*/
 app.get('/api/graph/files/:fileName', (req, res) => {
   const { fileName } = req.params;
   const filePath = path.join(filesPath, `${fileName}.json`);
@@ -154,7 +165,10 @@ app.get('/api/graph/files/:fileName', (req, res) => {
     res.status(500).json({ error: 'Erreur lors de la création du graphe à partir du fichier JSON' });
   }
 });
-// Fonction pour créer le graphe avec Cytoscape à partir du fichier JSON
+
+/* 
+Function to create the graph from the json with cytoscape
+*/
 function createGraphFromJSON(filePath) {
   const cy = cytoscape({ headless: true }); 
 
@@ -175,7 +189,9 @@ function createGraphFromJSON(filePath) {
   }
 }
 
-// Fonction pour extraire les éléments du graphe (nodes et edges) à partir des données JSON
+/* 
+function to get the nodes and the edges depending the json structure
+*/
 function graphEl(data) {
   let nodes = [];
   let edges = [];
