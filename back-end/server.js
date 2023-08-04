@@ -7,7 +7,18 @@ const cytoscape = require('cytoscape');
 const cytosnap = require('cytosnap');
 
 const app = express();
-app.use(cors({origin: ['http://localhost:3000', 'http://localhost:3001']}));
+const allowedOrigins = ['https://cytoscape-tp1.vercel.app'];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+}));
+// app.use(cors());
 
 const filesPath = path.join(__dirname, 'files');
 const filesImgPath = path.join(__dirname, 'files_img');
