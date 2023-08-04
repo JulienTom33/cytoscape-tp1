@@ -7,7 +7,7 @@ const cytoscape = require('cytoscape');
 const cytosnap = require('cytosnap');
 
 const app = express();
-app.use(cors());
+app.use(cors({origin: ['http://localhost:3000', 'http://localhost:3001']}));
 
 const filesPath = path.join(__dirname, 'files');
 const filesImgPath = path.join(__dirname, 'files_img');
