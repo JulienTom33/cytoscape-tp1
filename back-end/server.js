@@ -7,7 +7,7 @@ const cytoscape = require('cytoscape');
 const cytosnap = require('cytosnap');
 
 const app = express();
-const allowedOrigins = ['https://cytoscape-tp1.vercel.app'];
+const allowedOrigins = ['*'];
 
 app.use(cors({
   origin: function (origin, callback) {
