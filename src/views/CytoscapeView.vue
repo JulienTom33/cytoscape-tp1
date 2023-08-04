@@ -378,6 +378,8 @@ onMounted(async ()=>{
       <option value="updated_affinity_purification_communities_spheres">purif_diago</option>
       <option value="updated_affinity_purification_communities_spheres">purif_louvain_spheres</option>
       <option value="updated_affinity_purification_LPA_communities_spheres">purif LPA spheres</option>
+      <option value="test">test_copy</option>
+      <option value="test-hermann">test hermann</option>
     </select>
 
     <label for="layout">Layout: </label>
