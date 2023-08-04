@@ -7,18 +7,8 @@ const cytoscape = require('cytoscape');
 const cytosnap = require('cytosnap');
 
 const app = express();
-const allowedOrigins = ['*'];
 
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  }
-}));
-// app.use(cors());
+app.use(cors());
 
 const filesPath = path.join(__dirname, 'files');
 const filesImgPath = path.join(__dirname, 'files_img');
