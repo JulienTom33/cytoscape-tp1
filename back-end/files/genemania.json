@@ -248,7 +248,7 @@
             "position": {
                 "x": 523.0805123592361,
                 "y": 701.3351640609811
-            },
+            },            
             "style": {
                 "background-image": [
                   "https://upload.wikimedia.org/wikipedia/commons/5/5a/Mountain_Icon.svg"                
@@ -336,17 +336,8 @@
             "position": {
                 "x": 346.8429921157798,
                 "y": 511.09602664177663
-            },
-            "style": {
-                "background-image": [
-                  "https://upload.wikimedia.org/wikipedia/commons/4/41/Israel_road_sign_304.svg"                
-                ],                
-                "background-width": "25px",
-                "background-height": "25px",
-                "background-image-opacity": 0.8,
-                "background-clip": "none",
-                "background-repeat": "no-repeat"                  
-              },
+            },               
+               
             "group": "nodes",
             "removed": false,
             "selected": false,

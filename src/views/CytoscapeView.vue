@@ -271,7 +271,7 @@ const drawGraph = async () => {
         .stylesheet()
         .selector('node')
         .css({   
-          label: 'data(label)',
+          'label': 'data(label)',
           'background-color': '#8ec8d4', 
             'border-width': '2px',
             'border-style': 'solid',
@@ -291,7 +291,7 @@ const drawGraph = async () => {
         })
         .selector('edge')
         .css({ 
-            label: 'data(name)',      
+            'label': 'data(name)',      
             'line-color': '#636161',
             'curve-style': 'haystack',
             'min-zoomed-font-size': 8,
