@@ -263,7 +263,7 @@ const drawGraph = async () => {
       container: document.getElementById('cy'),
       boxSelectionEnabled: false,
       autounselectify: true,
-      wheelSensitivity: 0.2,
+      wheelSensitivity: 0.5,
       hideEdgesOnViewport: false,
       textureOnViewport: false,
       motionBlur: false, 
@@ -272,11 +272,15 @@ const drawGraph = async () => {
         .selector('node')
         .css({   
           label: 'data(label)',
-          'width': 100,
-          'height': 100,          
-          'min-zoomed-font-size': 8,
-          'font-size': 7,          
-          'background-color': 'gray',
+          'background-color': '#8ec8d4', 
+            'border-width': '2px',
+            'border-style': 'solid',
+            'border-color': '#148196',
+            'width': 20,
+            'height': 20,                  
+            'background-clip': 'none',
+            'min-zoomed-font-size': 8,
+            'font-size': 3, 
           'background-image': [            
             // 'src/assets/Instagram_icon.png'  
             'src/assets/controller-classic.png'         
@@ -288,10 +292,15 @@ const drawGraph = async () => {
         .selector('edge')
         .css({ 
             label: 'data(name)',      
-           'line-color': 'blue',
-           'curve-style' : 'unbundled-bezier(multiple)', 
-           'min-zoomed-font-size': 8,
-           'font-size': 7
+            'line-color': '#636161',
+            'curve-style': 'haystack',
+            'min-zoomed-font-size': 8,
+            'font-size': 3,
+      
+            'width': 1, 
+            'line-style': 'solid', 
+            'overlay-padding': 2, 
+            'opacity' : 0.3 
         }),
         elements: {  
           nodes,
@@ -299,27 +308,37 @@ const drawGraph = async () => {
         },
         layout: layoutOptions[selectedLayout.value]        
       });
-      
-      // on zoom-in, the nodes and the edges style change
-      cy.on('render', () => {
-      cy.nodes().forEach((node) => {
-        const currentZoom = cy.zoom();
-        const fontSize = 1 * currentZoom;
-        
-        node.style('width', `${10 / currentZoom}px`);
-        node.style('height', `${10 / currentZoom}px`);
-        node.style('font-size', `${fontSize}px`);
-      });
 
-      cy.edges().forEach((edge) => {
-        const currentZoom = cy.zoom();
-        const fontSize = 1 * currentZoom;
+      // on zoom-in, the edge's width changed
+  cy.on('zoom', (event) => {
+    const currentZoom = event.cy.zoom();
+    const edgeWidth = Math.max(1, 1 / currentZoom);
+
+  cy.style().selector('edge').style({
+    'width': edgeWidth + 'px'
+  }).update();
+  }); 
+      
+    //   // on zoom-in, the nodes and the edges style change
+    //   cy.on('render', () => {
+    //   cy.nodes().forEach((node) => {
+    //     const currentZoom = cy.zoom();
+    //     const fontSize = 1 * currentZoom;
+        
+    //     node.style('width', `${10 / currentZoom}px`);
+    //     node.style('height', `${10 / currentZoom}px`);
+    //     node.style('font-size', `${fontSize}px`);
+    //   });
+
+    //   cy.edges().forEach((edge) => {
+    //     const currentZoom = cy.zoom();
+    //     const fontSize = 1 * currentZoom;
        
-        edge.style('width', 2 / currentZoom);
-        edge.style('font-size', `${fontSize}px`);
-        edge.style('curve-style', 'bezier' )
-      });
-    });      
+    //     edge.style('width', 2 / currentZoom);
+    //     edge.style('font-size', `${fontSize}px`);
+    //     edge.style('curve-style', 'bezier' )
+    //   });
+    // });      
 
   } catch (error) {
     console.error(error);

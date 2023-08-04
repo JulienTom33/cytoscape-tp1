@@ -211,7 +211,6 @@ const layoutOptions = {
   } 
 };
 
-
 // Fonction pour récupérer le graphe en fonction du nom de fichier sélectionné
 const drawGraph = async () => {
   try {
@@ -221,24 +220,23 @@ const drawGraph = async () => {
   
     const response = await axios.get(`http://localhost:3000/api/graph/files/${selectedValue}`)
   
-    const graphData = response.data;    
+    const graphData = response.data;  
+    console.log(graphData)
 
-    // Initialisez Cytoscape avec les données du graphe  
-    const cy = cytoscape({
+    const cy = cytoscape({      
       container: document.getElementById('cy'),
       boxSelectionEnabled: false,
       autounselectify: true,
-      wheelSensitivity: 0.5,
+      wheelSensitivity: 0.2,
       hideEdgesOnViewport: false,
       textureOnViewport: false,
-      motionBlur: false,
-      elements: graphData,
-      style: [        
-        {
-          selector: 'node',
-          style: {
-            label: 'data(label)',
-            'background-color': '#8ec8d4', 
+      motionBlur: false, 
+      style: cytoscape
+        .stylesheet()
+        .selector('node')
+        .css({   
+          label: 'data(label)',
+          'background-color': '#8ec8d4', 
             'border-width': '2px',
             'border-style': 'solid',
             'border-color': '#148196',
@@ -247,21 +245,17 @@ const drawGraph = async () => {
             'background-clip': 'none',
             'min-zoomed-font-size': 8,
             'font-size': 3, 
-            // "background-image": [
-            //       "https://upload.wikimedia.org/wikipedia/commons/9/92/MK_road_sign_251.svg"                
-            //     ],                
-            //     "background-width": "25px",
-            //     "background-height": "25px",
-            //     "background-image-opacity": 0.8,
-            //     "background-clip": "none",
-            //     "background-repeat": "no-repeat"      
-                                
-          }
-        },
-        {
-          selector: 'edge',
-          style: {
-            label: 'data(name)',
+          'background-image': [            
+            // 'src/assets/Instagram_icon.png'  
+            'src/assets/controller-classic.png'         
+          ],
+          'background-fit': 'cover cover',
+          'background-clip': 'none',
+          'background-image-opacity': 0.8,                          
+        })
+        .selector('edge')
+        .css({ 
+            label: 'data(name)',      
             'line-color': '#636161',
             'curve-style': 'haystack',
             'min-zoomed-font-size': 8,
@@ -270,12 +264,66 @@ const drawGraph = async () => {
             'width': 1, 
             'line-style': 'solid', 
             'overlay-padding': 2, 
-            'opacity' : 0.3  
-          }
-        }
-      ],
-        layout: layoutOptions[selectedLayout.value]            
-    });
+            'opacity' : 0.3 
+        }),
+        elements: {  
+          graphData
+        },
+        layout: layoutOptions[selectedLayout.value]        
+      });
+
+    // Initialisez Cytoscape avec les données du graphe  
+    // const cy = cytoscape({
+    //   container: document.getElementById('cy'),
+    //   boxSelectionEnabled: false,
+    //   autounselectify: true,
+    //   wheelSensitivity: 0.5,
+    //   hideEdgesOnViewport: false,
+    //   textureOnViewport: false,
+    //   motionBlur: false,
+    //   elements: graphData,
+    //   style: [        
+    //     {
+    //       selector: 'node',
+    //       style: {
+    //         label: 'data(label)',
+    //         'background-color': '#8ec8d4', 
+    //         'border-width': '2px',
+    //         'border-style': 'solid',
+    //         'border-color': '#148196',
+    //         'width': 20,
+    //         'height': 20,                  
+    //         'background-clip': 'none',
+    //         'min-zoomed-font-size': 8,
+    //         'font-size': 3, 
+    //         // "background-image": [
+    //         //       "https://upload.wikimedia.org/wikipedia/commons/9/92/MK_road_sign_251.svg"                
+    //         //     ],                
+    //         //     "background-width": "25px",
+    //         //     "background-height": "25px",
+    //         //     "background-image-opacity": 0.8,
+    //         //     "background-clip": "none",
+    //         //     "background-repeat": "no-repeat"                                  
+    //       }
+    //     },
+    //     {
+    //       selector: 'edge',
+    //       style: {
+    //         label: 'data(name)',
+    //         'line-color': '#636161',
+    //         'curve-style': 'haystack',
+    //         'min-zoomed-font-size': 8,
+    //         'font-size': 3,
+      
+    //         'width': 1, 
+    //         'line-style': 'solid', 
+    //         'overlay-padding': 2, 
+    //         'opacity' : 0.3  
+    //       }
+    //     }
+    //   ],
+    //     layout: layoutOptions[selectedLayout.value]            
+    // });
 
   // on zoom-in, the edge's width changed
   cy.on('zoom', (event) => {
@@ -286,6 +334,7 @@ const drawGraph = async () => {
     'width': edgeWidth + 'px'
   }).update();
   }); 
+  
 
   } catch (error) {
     console.error('Erreur lors de la récupération du graphe:', error);
