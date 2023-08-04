@@ -27,7 +27,7 @@ function to get all the jsons
 const getAllFiles = async () => {
   try {
     // const response = await axios.get('http://localhost:3000/api/files/');
-    const response = await axios.get('/api/files/');
+    const response = await axios.get('https://cytoscape-tp1.vercel.app/api/files/');
     const files = response.data; 
     // console.log(files);
   } catch (error) {
@@ -256,7 +256,7 @@ const drawGraph = async () => {
     const selectedValue = selectElement.value;
 
     // const response = await axios.get(`http://localhost:3000/api/files/${selectedValue}`)
-    const response = await axios.get(`/api/files/${selectedValue}`)
+    const response = await axios.get(`https://cytoscape-tp1.vercel.app/api/files/${selectedValue}`)
     const graphData = response.data.elements;
     console.log(graphData)  
 
