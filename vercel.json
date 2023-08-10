@@ -1,9 +1,11 @@
 {
-  "routes": [
-    { "src": "^/api/files_img/:fileName$", "dest": "/api/files_img/:fileName" },
-    { "src": "^/api/graph/files/:fileName$", "dest": "/api/graph/files/:fileName" },
-    { "src": "^/api/files/:fileName$", "dest": "/api/files/:fileName" },
-    { "src": "^/api/files$", "dest": "/api/files" },
-    { "src": "^/(.*)$", "dest": "/index.html" }
-  ]
-}
+    "version": 1,
+    "name": "cytoscape-tp1",    
+    "routes": [
+       { "src": "/api/files_img/:fileName", "dest": "/api/files_img/:fileName" },
+       { "src": "/api/graph/files/:fileName", "dest": "/api/graph/files/:fileName" },
+       { "src": "/api/files/:fileName", "dest": "/api/files/:fileName" },
+       { "src": "/api/files", "dest": "/api/files" },
+       { "src": "/(.*)", "dest": "/index.html" }
+    ]
+ }
