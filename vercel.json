@@ -24,8 +24,5 @@
         "src": "/cytosnap",
         "dest": "/cytosnap"
       }
-    ],
-    "build": {
-      "targets": ["esm"]
-    }
+    ]   
   }
