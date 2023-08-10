@@ -19,10 +19,6 @@
       {
         "src": "/(.*)",
         "dest": "/index.html"
-      },
-      {
-        "src": "/cytosnap",
-        "dest": "/cytosnap"
-      }
+      }      
     ]   
   }
