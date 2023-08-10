@@ -10,6 +10,10 @@ export default defineConfig({
     vue(),
     vueJsx(),           
   ],
+  build: {
+    outDir: 'dir', // Dossier de sortie pour les fichiers générés
+    assetsDir: 'assets', // Dossier pour les actifs tels que les fichiers CSS et JS
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
