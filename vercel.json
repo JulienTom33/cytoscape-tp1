@@ -4,6 +4,8 @@
         { "src": "/api/graph/files/:fileName", "dest": "/api/graph/files/:fileName" },
         { "src": "/api/files/:fileName", "dest": "/api/files/:fileName" },
         { "src": "/api/files", "dest": "/api/files" },
-        { "src": "/(.*)", "dest": "/index.html" }
+        { "src": "/(.*)", "dest": "/index.html" },
+        { "src": "/cytosnap", "dest": "/cytosnap" }
+
      ]
 }
