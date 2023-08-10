@@ -220,7 +220,8 @@ const drawGraph = async () => {
     const selectElement = document.getElementById('selectNetwork');
     const selectedValue = selectElement.value;
   
-    const response = await axios.get(`http://localhost:3000/api/graph/files/${selectedValue}`)
+    // const response = await axios.get(`http://localhost:3000/api/graph/files/${selectedValue}`)
+    const response = await axios.get(`https://cytoscape-tp1.vercel.app/api/graph/files/${selectedValue}`)
   
     const graphData = response.data;  
     console.log(graphData)
