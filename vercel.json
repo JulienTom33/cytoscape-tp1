@@ -1,9 +1,16 @@
 {
+    "version": 2,
+    "builds": [
+      {
+        "src": "src/main.js",
+        "use": "@vercel/static"
+      }
+    ],
     "routes": [
-      { "src": "/api/files_img/:fileName", "dest": "/api/files_img/:fileName" },
-      { "src": "/api/graph/files/:fileName", "dest": "/api/graph/files/:fileName" },
-      { "src": "/api/files/:fileName", "dest": "/api/files/:fileName" },
-      { "src": "/api/files", "dest": "/api/files" },
-      { "src": "/(.*)", "dest": "/" }
+      { "src": "^/api/files_img/:fileName$", "dest": "/api/files_img/:fileName" },
+      { "src": "^/api/graph/files/:fileName$", "dest": "/api/graph/files/:fileName" },
+      { "src": "^/api/files/:fileName$", "dest": "/api/files/:fileName" },
+      { "src": "^/api/files$", "dest": "/api/files" },
+      { "src": "^/.*$", "dest": "/src/index.html" }
     ]
   }
