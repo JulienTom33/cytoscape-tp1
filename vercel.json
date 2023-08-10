@@ -7,5 +7,9 @@
         { "src": "/(.*)", "dest": "/index.html" },
         { "src": "/cytosnap", "dest": "/cytosnap" }
 
-     ]
+     ],
+
+     "build:targets": [
+        "build:esm"
+      ]
 }
