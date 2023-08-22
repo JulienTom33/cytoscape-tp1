@@ -1,6 +1,47 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import axios from 'axios';
+let scale = 1;
+let pointX = 0;
+let pointY = 0;
+
+const zoom = ref(null); // Référence à l'élément de zoom
+
+const setTransform = () => {
+  zoom.value.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
+};
+
+const handleMouseDown = (e) => {
+  e.preventDefault();
+  const start = { x: e.clientX - pointX, y: e.clientY - pointY };
+  const handleMouseMove = (e) => {
+    e.preventDefault();
+    pointX = (e.clientX - start.x);
+    pointY = (e.clientY - start.y);
+    setTransform();
+  };
+  document.addEventListener('mousemove', handleMouseMove);
+  document.addEventListener('mouseup', () => {
+    document.removeEventListener('mousemove', handleMouseMove);
+  }, { once: true });
+};
+
+const handleWheel = (e) => {
+  e.preventDefault();
+  const offsetX = e.clientX - pointX;
+  const offsetY = e.clientY - pointY;
+  const delta = e.wheelDelta ? e.wheelDelta : -e.deltaY;
+  const direction = delta > 0 ? 1 : -1;
+  const factor = (direction === 1 ? 1.2 : 0.8);
+  scale *= factor;
+  pointX -= offsetX * (factor - 1);
+  pointY -= offsetY * (factor - 1);
+  setTransform();
+  };
+
+
+
+
 
 const getAllFiles = async () => {
   try {
@@ -14,9 +55,6 @@ const getAllFiles = async () => {
 
 const graphImage = ref(null);
 
-const zoomLevel = ref(100); 
-const maxZoomLevel = 1000; 
-const minZoomLevel = 20;
 
 const getNetwork = async () => {
   loadGraphImage();
@@ -35,19 +73,8 @@ const loadGraphImage = async () => {
   }
 };
 
-const handleMouseWheel = (event) => { 
-  event.preventDefault(); 
-  
-  const delta = event.deltaY; 
-  zoomLevel.value += delta > 0 ? -25 : 25;
 
-  if (zoomLevel.value > maxZoomLevel) zoomLevel.value = maxZoomLevel;
-  if (zoomLevel.value < minZoomLevel) zoomLevel.value = minZoomLevel;
-};
 
-const zoomStyle = computed(() => ({
-  transform: `scale(${zoomLevel.value / 100})`,
-}));
 
 onMounted(async ()=>{   
   await loadGraphImage(); 
@@ -83,33 +110,60 @@ onMounted(async ()=>{
       </select>      
     </header> 
 
+    <div ref="zoom" @mousedown="handleMouseDown" @wheel="handleWheel">
+  <img :src="graphImage" alt="Graph" class="graphImage" />
+</div>
 
-    <div @wheel="handleMouseWheel">     
-      <img :src="graphImage" alt="Graph" :style="zoomStyle" class="graphImage" />      
-    </div>
-  
 
   </template>
 
 <style scoped>
+/* Styles pour l'élément zoomable */
+
+
+/* Vos autres styles */
 .header {  
   position: absolute;
   top: 0;
-  right: 20px;
+  right: 0px;
   padding: 10px; 
 }
 
 .graphImage {
-  width: 60vw;
-  height: 60vh;  
+  width: 100%;
+  height: 100%;  
 }
 
 #cy {
   width: 100%;
-  height: 90%;
-  position: absolute;
-  top: 70px;
+  height: 100%;
+  position: 50% 50%;
+  top: 0px;
   left: 0;
+}
+* {
+  padding: 0;
+  margin: 0;
+  outline: 0;
+  overflow: hidden;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+#zoom {
+  width: 100%;
+  height: 100%;
+  transform-origin: 0px 0px;
+  transition: 0.25s;
+  cursor: grab;
+}
+div#zoom > img {
+  width: 100%;
+  height: auto;
 }
 
 </style>
